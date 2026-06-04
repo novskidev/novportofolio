@@ -3,6 +3,7 @@ import SmartImage from '../SmartImage.astro';
 import PageView from '../comments/PageView.astro';
 import FormattedDate from '../FormattedDate.astro';
 import Icon from '../Icon.astro';
+import { slugifyGroupName } from '../../utils/content-groups';
 
 interface Props {
   title: string;
@@ -75,7 +76,9 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
               {hasTags && (
                 <span class="meta-item tag-list">
                   {tags.map((tag) => (
-                    <span class="tag">#{tag}</span>
+                    <a class="tag" href={`${basePath}/blog/tags/${slugifyGroupName(tag)}/`}>
+                      #{tag}
+                    </a>
                   ))}
                 </span>
               )}
@@ -132,7 +135,9 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
             {hasTags && (
               <span class="meta-item tag-list">
                 {tags.map((tag) => (
-                  <span class="tag">#{tag}</span>
+                  <a class="tag" href={`${basePath}/blog/tags/${slugifyGroupName(tag)}/`}>
+                    #{tag}
+                  </a>
                 ))}
               </span>
             )}
@@ -250,6 +255,12 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--paper-accent);
     font-family: var(--font-serif-cn);
     font-weight: 700;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .tag:hover {
+    color: var(--paper-ink);
   }
 
   .group-meta-line {

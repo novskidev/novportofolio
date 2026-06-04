@@ -88,6 +88,10 @@ href = "/blog"
 label = "Project"
 href = "/projects"
 
+[[config.topNav.links]]
+label = "Vibe"
+href = "/vibe"
+
 [config.home]
 layout = "grid"
 

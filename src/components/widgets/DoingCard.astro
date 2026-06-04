@@ -80,7 +80,7 @@ const { items } = Astro.props as { items: DoingItem[] };
   li {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 32px;
+    grid-template-columns: minmax(0, 1fr) max-content;
     gap: 12px;
     align-items: center;
     padding: 14px 0 14px 18px;
@@ -96,7 +96,7 @@ const { items } = Astro.props as { items: DoingItem[] };
 
   a {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 48px;
+    grid-template-columns: minmax(0, 1fr) max-content;
     gap: 12px;
     align-items: center;
     color: inherit;
@@ -121,6 +121,10 @@ const { items } = Astro.props as { items: DoingItem[] };
     text-transform: uppercase;
   }
 
+  span {
+    min-width: 0;
+  }
+
   li::before {
     position: absolute;
     left: 0;
@@ -134,5 +138,6 @@ const { items } = Astro.props as { items: DoingItem[] };
   strong {
     font-size: 0.82rem;
     text-align: right;
+    white-space: nowrap;
   }
 </style>

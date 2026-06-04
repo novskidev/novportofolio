@@ -3,16 +3,18 @@ interface Props {
   name: string;
   slug: string;
   count: number;
+  label?: string;
+  hrefBase?: string;
 }
 
-const { name, slug, count } = Astro.props;
+const { name, slug, count, label = 'Category', hrefBase = '/blog/categories' } = Astro.props;
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
-const href = `${basePath}/blog/categories/${slug}/`;
+const href = `${basePath}${hrefBase}/${slug}/`;
 const articleLabel = count === 1 ? 'article' : 'articles';
 ---
 
 <a class="category-card" href={href}>
-  <span class="category-label">Category</span>
+  <span class="category-label">{label}</span>
   <strong>{name}</strong>
   <span>{count} {articleLabel}</span>
 </a>

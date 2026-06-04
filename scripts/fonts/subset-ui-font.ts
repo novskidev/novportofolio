@@ -88,6 +88,7 @@ function runSubset() {
   const commands = [
     { command: 'pyftsubset', args },
     { command: 'python', args: ['-m', 'fontTools.subset', ...args] },
+    { command: 'python3', args: ['-m', 'fontTools.subset', ...args] },
   ];
 
   for (const { command, args: commandArgs } of commands) {
@@ -99,8 +100,13 @@ function runSubset() {
     if (result.error && 'code' in result.error && result.error.code === 'ENOENT') continue;
   }
 
+  if (existsSync(outputFontPath)) {
+    console.warn(`Unable to run fonttools. Reusing existing generated font at ${outputFontPath}.`);
+    return;
+  }
+
   throw new Error(
-    'Unable to run fonttools. Install it with `python -m pip install --user fonttools brotli`, or make `pyftsubset` available on PATH.',
+    'Unable to run fonttools. Install it with `python3 -m pip install --user fonttools brotli`, or make `pyftsubset` available on PATH.',
   );
 }
 

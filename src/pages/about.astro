@@ -1,0 +1,125 @@
+---
+import BlogArticle from '../layouts/BlogArticle.astro';
+
+const title = 'about me';
+const description = 'Profile and contact page for Novian Nadari, the person behind Novskidev.';
+const date = new Date('2026-05-01T00:00:00+08:00');
+const portraitSrc = '/images/logo.png';
+---
+
+<BlogArticle
+  title={title}
+  description={description}
+  date={date}
+  showHeroImage={false}
+  tags={['About', 'Portfolio', 'Novskidev']}
+  sidebar={{ enable: false, toc: false, relatedPosts: false }}
+  contentFont="ui"
+  showMeta={false}
+>
+  <section class="about-layout" aria-label="About Novian Nadari">
+    <div class="about-copy">
+      <p>
+        Hi, I'm Novian Nadari—a passionate Software Engineer &amp; Educator based in Yogyakarta,
+        Indonesia 🇮🇩. I am currently deepening my knowledge in programming while working as a
+        freelance software engineer. Besides coding, I dedicate my time to teaching at an elementary
+        school, sharing knowledge, and inspiring young minds.
+      </p>
+
+      <h2>Focus</h2>
+      <ul>
+        <li>Building clean, lightweight, and usable websites and interfaces.</li>
+        <li>Documenting learning notes, experiments, and technical decisions.</li>
+        <li>Collecting personal projects in one readable portfolio.</li>
+        <li>Growing a consistent digital identity through <code>novski.dev</code>.</li>
+      </ul>
+
+      <h2>Contact</h2>
+      <p>
+        You can reach me at <a href="mailto:novskidev@gmail.com">novskidev@gmail.com</a>. My main
+        domain is <a href="https://novski.dev/">novski.dev</a>.
+      </p>
+    </div>
+
+    <aside class="about-photo" aria-label="Personal photo">
+      <figure>
+        <img src={portraitSrc} alt="Novian Nadari portrait" loading="eager" />
+        <figcaption>
+          Replace this image with a personal photo in <code>public/images/</code>.
+        </figcaption>
+      </figure>
+    </aside>
+  </section>
+</BlogArticle>
+
+<style>
+  .about-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+
+  :global(.blog-content-ui .article-header h1) {
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  }
+
+  .about-copy {
+    min-width: 0;
+  }
+
+  .about-photo {
+    position: sticky;
+    top: 118px;
+  }
+
+  .about-photo figure {
+    position: relative;
+    margin: 0;
+    padding: 10px;
+    border: 1px solid var(--paper-line);
+    border-radius: 18px;
+    background: var(--paper-surface-muted);
+    box-shadow: var(--paper-shadow-lift);
+    transform: rotate(1.5deg);
+    transition:
+      transform 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease;
+  }
+
+  .about-photo figure:hover,
+  .about-photo figure:focus-within {
+    border-color: color-mix(in srgb, var(--paper-accent) 46%, var(--paper-line));
+    box-shadow: 0 12px 30px rgba(31, 35, 40, 0.1);
+    transform: rotate(-3deg) translateY(-3px);
+  }
+
+  .about-photo img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 12px;
+    background: var(--paper-control);
+  }
+
+  .about-photo figcaption {
+    margin-top: 10px;
+    color: var(--paper-ink-faint);
+    font-size: 0.72rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 760px) {
+    .about-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .about-photo {
+      position: static;
+      width: min(100%, 280px);
+      order: -1;
+    }
+  }
+</style>

@@ -1,0 +1,149 @@
+---
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import '../styles/global.css';
+import type { ImageMetadata } from 'astro';
+import FallbackImage from '../assets/figure/fail-loading-image.png';
+import { getSiteConfig } from '../data/site';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: ImageMetadata | string;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const assetPath = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+
+const { title, description, image = FallbackImage } = Astro.props;
+const imageUrl = typeof image === 'string' ? image : image.src;
+const { site } = await getSiteConfig();
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<ClientRouter />
+<script is:inline>
+  (() => {
+    const storageKey = 'novskidev-theme';
+    const root = document.documentElement;
+    const themeMeta = () => document.querySelector('meta[name="theme-color"]');
+    const themeColor = (theme) => (theme === 'dark' ? '#171b18' : '#f4f1e8');
+    const normalizeTheme = (theme) => (theme === 'dark' ? 'dark' : 'light');
+    const systemTheme = () =>
+      window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const storedTheme = () => {
+      try {
+        return localStorage.getItem(storageKey);
+      } catch {
+        return null;
+      }
+    };
+    const setStoredTheme = (theme) => {
+      try {
+        localStorage.setItem(storageKey, theme);
+      } catch {}
+    };
+    const currentTheme = () => root.dataset.theme || storedTheme() || systemTheme();
+    const applyThemeToRoot = (targetRoot, theme) => {
+      const nextTheme = normalizeTheme(theme);
+
+      targetRoot.dataset.theme = nextTheme;
+      targetRoot.style.colorScheme = nextTheme;
+
+      return nextTheme;
+    };
+    const applyTheme = (theme, persist = true) => {
+      const nextTheme = applyThemeToRoot(root, theme);
+      const toggleLabel = nextTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
+
+      themeMeta()?.setAttribute('content', themeColor(nextTheme));
+      for (const button of document.querySelectorAll('[data-theme-toggle]')) {
+        button.setAttribute('aria-label', toggleLabel);
+        button.setAttribute('title', toggleLabel);
+      }
+      if (persist) setStoredTheme(nextTheme);
+      window.dispatchEvent(
+        new CustomEvent('novskidev:theme-change', { detail: { theme: nextTheme } }),
+      );
+    };
+    const syncThemeControls = () => {
+      applyTheme(currentTheme(), false);
+    };
+
+    applyTheme(storedTheme() || systemTheme(), false);
+
+    if (!window.__novskidevTheme) {
+      window.__novskidevTheme = {
+        toggle() {
+          applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+        },
+      };
+    }
+
+    if (window.__novskidevThemeInitialized) {
+      syncThemeControls();
+      return;
+    }
+
+    window.__novskidevThemeInitialized = true;
+
+    document.addEventListener('click', (event) => {
+      const toggle = event.target.closest?.('[data-theme-toggle]');
+      if (toggle) window.__novskidevTheme.toggle();
+    });
+
+    document.addEventListener('DOMContentLoaded', syncThemeControls, { once: true });
+    document.addEventListener('astro:before-swap', (event) => {
+      const nextTheme = applyThemeToRoot(event.newDocument.documentElement, currentTheme());
+
+      event.newDocument
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', themeColor(nextTheme));
+    });
+    document.addEventListener('astro:after-swap', syncThemeControls);
+    document.addEventListener('astro:page-load', syncThemeControls);
+
+    window.matchMedia?.('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+      if (!storedTheme()) applyTheme(event.matches ? 'dark' : 'light', false);
+    });
+  })();
+</script>
+<link rel="icon" href={assetPath('favicon.svg')} sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href={assetPath('favicon-32x32.png')} />
+<link rel="icon" type="image/png" sizes="16x16" href={assetPath('favicon-16x16.png')} />
+<link rel="apple-touch-icon" sizes="180x180" href={assetPath('apple-touch-icon.png')} />
+<link rel="manifest" href={assetPath('manifest.json')} />
+<meta name="theme-color" content="#f4f1e8" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={site.title}
+  href={new URL('rss.xml', Astro.site)}
+/>
+<meta name="generator" content={Astro.generator} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(imageUrl, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(imageUrl, Astro.url)} />

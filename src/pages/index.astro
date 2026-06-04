@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import IntroCard from '../components/cards/IntroCard.astro';
+import NavigationCard from '../components/cards/NavigationCard.astro';
+import ProfileCard from '../components/cards/ProfileCard.astro';
+import DashboardFlow from '../components/layout/DashboardFlow.astro';
+import DoingCard from '../components/widgets/DoingCard.astro';
+import GitHubActivity from '../components/widgets/GitHubActivity.astro';
+import { getSiteConfig } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sortByDateDesc } from '../utils/content-dates';
+
+const { home, profile, site } = await getSiteConfig();
+const githubUsername = profile.github
+  ? new URL(profile.github).pathname.split('/').filter(Boolean)[0]
+  : '';
+const [posts, projects, vibes] = await Promise.all([
+  getCollection('blog', ({ data }) => !data.draft),
+  getCollection('projects', ({ id, data }) => id !== 'index' && !data.draft),
+  getCollection('vibe', ({ data }) => !data.draft),
+]);
+const recentContent = sortByDateDesc([
+  ...posts.map((post) => ({
+    id: post.id,
+    data: { date: post.data.date },
+    text: post.data.title,
+    mark: 'Blog',
+    href: `/blog/${post.id}/`,
+    meta: 'Latest writing',
+  })),
+  ...projects.map((project) => ({
+    id: project.id,
+    data: { date: project.data.date },
+    text: project.data.title,
+    mark: 'Project',
+    href: `/projects/${project.id}/`,
+    meta: 'Project note',
+  })),
+  ...vibes.map((vibe) => ({
+    id: vibe.id,
+    data: { date: vibe.data.date },
+    text: vibe.data.title ?? 'Vibe update',
+    mark: 'Vibe',
+    href: '/vibe/',
+    meta: 'Short update',
+  })),
+])
+  .slice(0, home.doing.length)
+  .map(({ text, mark, href, meta }) => ({ text, mark, href, meta }));
+const recentlyItems = recentContent.length > 0 ? recentContent : home.doing;
+---
+
+<BaseLayout title={site.pageTitle} description={site.pageDescription}>
+  <div class="publication-bg" aria-hidden="true"></div>
+  <DashboardFlow>
+    <Fragment slot="profile">
+      <ProfileCard profile={profile} />
+    </Fragment>
+
+    <Fragment slot="hero">
+      <IntroCard intro={home.intro} quote={home.quote} />
+    </Fragment>
+
+    <Fragment slot="activity">
+      <GitHubActivity username={githubUsername || 'novskidev'} />
+    </Fragment>
+
+    <Fragment slot="links">
+      <NavigationCard items={home.navigation} />
+    </Fragment>
+
+    <Fragment slot="recently">
+      <DoingCard items={recentlyItems} />
+    </Fragment>
+  </DashboardFlow>
+</BaseLayout>

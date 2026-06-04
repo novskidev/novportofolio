@@ -1,0 +1,49 @@
+---
+title: 'Hello Novskidev'
+description: 'Catatan pembuka tentang arah blog dan portofolio Novian Nadari.'
+date: '2026-06-04T00:00:00+08:00'
+draft: false
+showHeroImage: false
+tags:
+  - Portfolio
+  - MDX
+  - Astro
+categories:
+  - Notes
+series: []
+comments: false
+sidebar:
+  enable: true
+  toc: true
+  relatedPosts: true
+---
+
+import FriendLinkCard from '../../components/mdx/FriendLinkCard.astro';
+
+Ini adalah catatan pembuka untuk blog Novskidev. Mulai dari sini, konten blog ditulis dengan MDX agar setiap artikel bisa tetap nyaman dibaca seperti Markdown, tetapi tetap bisa memakai komponen Astro saat dibutuhkan.
+
+## Kenapa MDX
+
+MDX memberi ruang untuk menulis artikel teknis, catatan proyek, dan dokumentasi personal dengan format yang fleksibel. Markdown tetap menjadi dasar penulisan, sementara komponen bisa dipakai untuk bagian yang perlu tampilan lebih kaya.
+
+Contoh penggunaan komponen di dalam artikel:
+
+<FriendLinkCard
+  items={[
+    {
+      name: 'Novskidev',
+      url: 'https://novski.dev/',
+      bio: 'Portfolio, notes, and digital presence of Novian Nadari.',
+      avatar: '/images/logo.png',
+    },
+  ]}
+/>
+
+## Rencana Konten
+
+- Catatan proses membangun website ini.
+- Dokumentasi proyek personal.
+- Eksperimen frontend dan static site.
+- Ringkasan pembelajaran yang layak disimpan.
+
+Blog ini akan berkembang perlahan bersama proyek dan tulisan baru.

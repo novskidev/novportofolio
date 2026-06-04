@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+out/
+build/
+
+# Astro generated files
+.astro/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Generated font files
+scripts/fonts/ui-chars.txt
+public/fonts/lxgw-ui-subset.woff2
+
+# Search index / generated artifacts
+dist/pagefind/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Tooling cache
+.cache/
+.eslintcache
+.parcel-cache/
+.vite/
+
+# Test / coverage output
+coverage/
+*.lcov
+
+# Local agent files
+.agents/
+AGENTS.md
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp

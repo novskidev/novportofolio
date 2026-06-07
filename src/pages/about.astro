@@ -4,7 +4,7 @@ import BlogArticle from '../layouts/BlogArticle.astro';
 const title = 'about me';
 const description = 'Profile and contact page for Novian Nadari, the person behind Novskidev.';
 const date = new Date('2026-05-01T00:00:00+08:00');
-const portraitSrc = '/images/logo.png';
+const portraitSrc = '/images/novian.jpeg';
 ---
 
 <BlogArticle
@@ -20,19 +20,11 @@ const portraitSrc = '/images/logo.png';
   <section class="about-layout" aria-label="About Novian Nadari">
     <div class="about-copy">
       <p>
-        Hi, I'm Novian Nadari—a passionate Software Engineer &amp; Educator based in Yogyakarta,
-        Indonesia 🇮🇩. I am currently deepening my knowledge in programming while working as a
-        freelance software engineer. Besides coding, I dedicate my time to teaching at an elementary
-        school, sharing knowledge, and inspiring young minds.
+        Hi, I'm Novian Nadari — a passionate Software Engineer &amp; Educator based in Yogyakarta,
+        Indonesia 🇮🇩. I am currently deepening my knowledge in Devops while working as a freelance
+        software engineer. Besides coding, I dedicate my time to teaching at an elementary school,
+        sharing knowledge, and inspiring young minds.
       </p>
-
-      <h2>Focus</h2>
-      <ul>
-        <li>Building clean, lightweight, and usable websites and interfaces.</li>
-        <li>Documenting learning notes, experiments, and technical decisions.</li>
-        <li>Collecting personal projects in one readable portfolio.</li>
-        <li>Growing a consistent digital identity through <code>novski.dev</code>.</li>
-      </ul>
 
       <h2>Contact</h2>
       <p>
@@ -44,9 +36,6 @@ const portraitSrc = '/images/logo.png';
     <aside class="about-photo" aria-label="Personal photo">
       <figure>
         <img src={portraitSrc} alt="Novian Nadari portrait" loading="eager" />
-        <figcaption>
-          Replace this image with a personal photo in <code>public/images/</code>.
-        </figcaption>
       </figure>
     </aside>
   </section>
@@ -74,25 +63,14 @@ const portraitSrc = '/images/logo.png';
   }
 
   .about-photo figure {
-    position: relative;
     margin: 0;
-    padding: 10px;
-    border: 1px solid var(--paper-line);
-    border-radius: 18px;
-    background: var(--paper-surface-muted);
-    box-shadow: var(--paper-shadow-lift);
     transform: rotate(1.5deg);
-    transition:
-      transform 220ms ease,
-      border-color 220ms ease,
-      box-shadow 220ms ease;
+    transition: transform 220ms ease;
   }
 
   .about-photo figure:hover,
   .about-photo figure:focus-within {
-    border-color: color-mix(in srgb, var(--paper-accent) 46%, var(--paper-line));
-    box-shadow: 0 12px 30px rgba(31, 35, 40, 0.1);
-    transform: rotate(-3deg) translateY(-3px);
+    transform: rotate(0deg);
   }
 
   .about-photo img {
@@ -102,13 +80,6 @@ const portraitSrc = '/images/logo.png';
     object-fit: cover;
     border-radius: 12px;
     background: var(--paper-control);
-  }
-
-  .about-photo figcaption {
-    margin-top: 10px;
-    color: var(--paper-ink-faint);
-    font-size: 0.72rem;
-    line-height: 1.55;
   }
 
   @media (max-width: 760px) {

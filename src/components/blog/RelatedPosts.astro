@@ -5,10 +5,11 @@ import SmartImage from '../SmartImage.astro';
 
 interface Props {
   posts: CollectionEntry<'blog'>[];
+  reasons?: Record<string, string>;
   class?: string;
 }
 
-const { posts, class: className } = Astro.props;
+const { posts, reasons = {}, class: className } = Astro.props;
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 function withBase(href: string) {
@@ -35,6 +36,7 @@ function withBase(href: string) {
           <span>
             <strong>{post.data.title}</strong>
             <small>
+              {reasons[post.id] && <em>{reasons[post.id]}</em>}
               <FormattedDate date={post.data.date} />
             </small>
           </span>
@@ -107,7 +109,23 @@ function withBase(href: string) {
   }
 
   small {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
     color: var(--paper-ink-faint);
     font-size: 0.75rem;
+  }
+
+  small em {
+    color: var(--paper-accent);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  small em::after {
+    margin-left: 5px;
+    color: var(--paper-ink-faint);
+    content: '\00b7';
   }
 </style>

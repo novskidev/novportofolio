@@ -10,7 +10,7 @@ type ContentTypeConfig = {
   defaultExtension: Extension;
   fileName: (slug: string, now: Date) => string;
   bodyTemplate: (title: string) => string;
-  frontmatterTemplate: (title: string, isoDate: string) => string;
+  frontmatterTemplate: (title: string, isoDate: string, draft: boolean) => string;
 };
 
 const CONTENT_TYPES = {
@@ -42,7 +42,8 @@ const CONTENT_TYPES = {
 
 const args = process.argv.slice(2);
 const contentTypeArg = args[0];
-const filenameArg = args.find((arg, index) => index > 0 && arg !== '--mdx');
+const optionArgs = args.slice(1).filter((arg) => arg.startsWith('--'));
+const filenameArg = args.find((arg, index) => index > 0 && !arg.startsWith('--'));
 
 if (!isSupportedContentType(contentTypeArg)) {
   printUnsupportedContentType(contentTypeArg);
@@ -64,7 +65,8 @@ if (!slug) {
 const now = new Date();
 const isoDate = now.toISOString();
 const config = CONTENT_TYPES[contentTypeArg];
-const extension: Extension = args.includes('--mdx') ? 'mdx' : config.defaultExtension;
+const extension: Extension = optionArgs.includes('--mdx') ? 'mdx' : config.defaultExtension;
+const draft = !optionArgs.includes('--publish');
 const title = createTitle(slug);
 const baseName = config.fileName(slug, now);
 const relativePath = path.join(config.directory, `${baseName}.${extension}`);
@@ -78,12 +80,15 @@ if (existsSync(targetPath)) {
 mkdirSync(path.dirname(targetPath), { recursive: true });
 writeFileSync(
   targetPath,
-  `${config.frontmatterTemplate(title, isoDate)}\n\n${config.bodyTemplate(title)}\n`,
+  `${config.frontmatterTemplate(title, isoDate, draft)}\n\n${config.bodyTemplate(title)}\n`,
   'utf8',
 );
 
 console.log(`Created new ${config.collectionName} file:`);
 console.log(relativePath);
+console.log(
+  `Status: ${draft ? 'draft. Set draft: false or pass --publish to publish.' : 'published.'}`,
+);
 
 function isSupportedContentType(value: string | undefined): value is ContentType {
   return value === 'blog' || value === 'project' || value === 'vibe';
@@ -118,12 +123,12 @@ function formatDatePrefix(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
-function createBlogFrontmatter(title: string, isoDate: string): string {
+function createBlogFrontmatter(title: string, isoDate: string, draft: boolean): string {
   return `---
 title: "${escapeYamlString(title)}"
 description: ""
 date: "${isoDate}"
-draft: true
+draft: ${draft}
 showHeroImage: false
 tags: []
 categories: []
@@ -136,12 +141,12 @@ sidebar:
 ---`;
 }
 
-function createProjectFrontmatter(title: string, isoDate: string): string {
+function createProjectFrontmatter(title: string, isoDate: string, draft: boolean): string {
   return `---
 title: "${escapeYamlString(title)}"
 description: ""
 date: "${isoDate}"
-draft: true
+draft: ${draft}
 showHeroImage: false
 tags: []
 categories: []
@@ -154,12 +159,12 @@ sidebar:
 ---`;
 }
 
-function createVibeFrontmatter(title: string, isoDate: string): string {
+function createVibeFrontmatter(title: string, isoDate: string, draft: boolean): string {
   return `---
 title: "${escapeYamlString(title)}"
 date: "${isoDate}"
 updatedDate: "${isoDate}"
-draft: true
+draft: ${draft}
 type: text
 mood: ""
 location: ""
@@ -195,6 +200,7 @@ function printMissingFilename(): void {
 
 Examples:
 bun run post:new my-first-post
+bun run post:new my-first-post --publish
 bun run project:new my-project
 bun run vibe:new today-cloud`);
 }

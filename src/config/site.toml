@@ -48,7 +48,7 @@ emit_metadata = "0"
 input_position = "top"
 light_theme = "light"
 dark_theme = "dark"
-lang = "zh-CN"
+lang = "en"
 loading = "lazy"
 
 [config.comments.utterances]
@@ -59,7 +59,7 @@ theme = "github-light"
 
 [config.comments.waline]
 server_url = ""
-lang = "zh-CN"
+lang = "en"
 dark = "html.dark"
 pageview = true
 comment = true
@@ -74,7 +74,7 @@ email = "novskidev@gmail.com"
 website = "https://novski.dev/"
 github = "https://github.com/novskidev"
 meta = "Personal portfolio"
-avatar = "/images/logo.png"
+avatar = "/images/Novskidev.png"
 
 [[config.topNav.links]]
 label = "About"
@@ -97,16 +97,15 @@ layout = "grid"
 
 [config.home.quote]
 text = [
-  "I share my projects, thoughts,",
-  "and everything else I want to share with the world.",
+  "A space for my projects, ideas, notes,",
+  "and everything I want to put out into the world.",
 ]
 image = "/images/logo-with-name.png"
 
 [config.home.intro]
-title = "I'm Novian👋"
-name = "Novian👋"
+title = "I'm Novian 👋"
+name = "Novian 👋"
 body = [
-  "I am Novian Nadari, a developer building my personal space on the web.",
   "This site collects my projects, notes, experiments, and professional profile in one place.",
   "The goal is simple: make my work easy to find, easy to read, and easy to grow over time.",
 ]
@@ -137,6 +136,12 @@ icon = "compass"
 title = "Project"
 subtitle = "Selected work and project notes"
 href = "/projects"
+
+[[config.home.navigation]]
+icon = "sparkle"
+title = "Vibe"
+subtitle = "Short updates and digital fragments"
+href = "/vibe"
 
 [[config.home.connect]]
 label = "GitHub"

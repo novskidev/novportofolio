@@ -92,17 +92,16 @@ function runSubset() {
   ];
 
   for (const { command, args: commandArgs } of commands) {
-    const result = spawnSync(command, commandArgs, { stdio: 'inherit' });
+    const result = spawnSync(command, commandArgs, { encoding: 'utf8' });
     if (result.status === 0) {
-      return;
+      return true;
     }
 
     if (result.error && 'code' in result.error && result.error.code === 'ENOENT') continue;
   }
 
   if (existsSync(outputFontPath)) {
-    console.warn(`Unable to run fonttools. Reusing existing generated font at ${outputFontPath}.`);
-    return;
+    return false;
   }
 
   throw new Error(
@@ -136,12 +135,21 @@ for (const file of lightweightContentFiles) {
   if (existsSync(path)) collectCjk(chars, readFileSync(path, 'utf8'));
 }
 
-const uiChars = [...chars].sort((a, b) => a.codePointAt(0)! - b.codePointAt(0)!).join('');
-if (!uiChars) throw new Error('No CJK UI characters were found for font subsetting.');
-
 mkdirSync(join(projectRoot, 'scripts/fonts'), { recursive: true });
 mkdirSync(join(projectRoot, 'public/fonts'), { recursive: true });
+
+const uiChars = [...chars].sort((a, b) => a.codePointAt(0)! - b.codePointAt(0)!).join('');
 writeFileSync(uiCharsPath, `${uiChars}\n`, 'utf8');
+
+if (!uiChars) {
+  if (!existsSync(outputFontPath)) {
+    throw new Error('No CJK UI characters were found and no generated font exists to reuse.');
+  }
+
+  console.log(`Generated ${uiCharsPath} with 0 CJK UI characters.`);
+  console.log(`Reused existing generated font at ${outputFontPath}.`);
+  process.exit(0);
+}
 
 if (!existsSync(sourceFontPath)) {
   throw new Error(
@@ -149,7 +157,11 @@ if (!existsSync(sourceFontPath)) {
   );
 }
 
-runSubset();
+const generatedSubset = runSubset();
 
 console.log(`Generated ${uiCharsPath} with ${uiChars.length} CJK UI characters.`);
-console.log(`Generated ${outputFontPath} from ${sourceFontPath}.`);
+console.log(
+  generatedSubset
+    ? `Generated ${outputFontPath} from ${sourceFontPath}.`
+    : `Reused existing generated font at ${outputFontPath}.`,
+);

@@ -11,12 +11,13 @@ import { getAllCategories } from '../../../utils/content-groups';
 const { site, theme } = await getSiteConfig();
 const palette = theme.palette;
 const categories = getAllCategories(await getCollection('blog', ({ data }) => !data.draft));
+const pageDescription = 'Browse blog posts by recurring topics and content categories.';
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-palette={palette}>
+<html lang="en" data-palette={palette}>
   <head>
-    <BaseHead title={`${site.title} | Categories`} description={site.description} />
+    <BaseHead title={`${site.title} | Categories`} description={pageDescription} />
     <style>
       main {
         width: min(100%, var(--layout-shell-width));
@@ -58,7 +59,7 @@ const categories = getAllCategories(await getCollection('blog', ({ data }) => !d
   </head>
   <body>
     <BlogTopNav />
-    <main data-pagefind-body>
+    <main id="main-content" data-pagefind-body>
       <BackLink href="/blog/" label="Back to blog" />
       <header class="archive-hero archive-header-shared page-header-spacing">
         <div class="archive-header-main">

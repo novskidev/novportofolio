@@ -68,6 +68,14 @@ const shortcutLabel = search.shortcut === 'mod+k' ? 'Ctrl K / Cmd K' : search.sh
         />
       </label>
 
+      <div class="site-search-filters" aria-label="Search filters" data-site-search-filters>
+        <button type="button" data-search-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-search-filter="blog" aria-pressed="false">Blog</button>
+        <button type="button" data-search-filter="project" aria-pressed="false">Projects</button>
+        <button type="button" data-search-filter="vibe" aria-pressed="false">Vibe</button>
+        <button type="button" data-search-filter="page" aria-pressed="false">Pages</button>
+      </div>
+
       <p class="site-search-status" data-site-search-status>Start typing to search.</p>
       <ol class="site-search-results" data-site-search-results></ol>
     </section>
@@ -163,6 +171,36 @@ const shortcutLabel = search.shortcut === 'mod+k' ? 'Ctrl K / Cmd K' : search.sh
   .site-search-head span,
   .site-search-status {
     font-family: var(--font-ui-label);
+  }
+
+  .site-search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 12px 10px;
+  }
+
+  .site-search-filters button {
+    min-height: 30px;
+    padding: 4px 9px;
+    border: 1px solid var(--paper-line);
+    border-radius: 999px;
+    background: var(--paper-control);
+    color: var(--paper-ink-soft);
+    cursor: pointer;
+    font-family: var(--font-ui-label);
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .site-search-filters button:hover,
+  .site-search-filters button:focus-visible,
+  .site-search-filters button[aria-pressed='true'] {
+    border-color: var(--paper-line-strong);
+    background: var(--paper-surface);
+    color: var(--paper-accent);
+    outline: none;
   }
 
   .site-search-head p {
@@ -269,6 +307,28 @@ const shortcutLabel = search.shortcut === 'mod+k' ? 'Ctrl K / Cmd K' : search.sh
     line-height: 1.35;
   }
 
+  .site-search-results :global(.site-search-result-heading) {
+    display: flex;
+    min-width: 0;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .site-search-results :global(.site-search-result-kind) {
+    flex: 0 0 auto;
+    padding: 3px 7px;
+    border: 1px solid var(--paper-line);
+    border-radius: 999px;
+    background: var(--paper-control);
+    color: var(--paper-accent);
+    font-family: var(--font-ui-label);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
   .site-search-results :global(.site-search-result-meta),
   .site-search-results :global(.site-search-result-match-label) {
     color: var(--paper-ink-faint);
@@ -282,6 +342,16 @@ const shortcutLabel = search.shortcut === 'mod+k' ? 'Ctrl K / Cmd K' : search.sh
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .site-search-results :global(.site-search-result-groups) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    color: var(--paper-ink-faint);
+    font-family: var(--font-ui-label);
+    font-size: 0.68rem;
+    font-weight: 700;
   }
 
   .site-search-results :global(.site-search-result-match) {

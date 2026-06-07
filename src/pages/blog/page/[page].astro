@@ -45,7 +45,7 @@ const { page, postOffset } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-palette={palette}>
+<html lang="en" data-palette={palette}>
   <head>
     <BaseHead
       title={`${site.title} | Blog page ${page.currentPage}`}
@@ -67,7 +67,7 @@ const { page, postOffset } = Astro.props;
   </head>
   <body>
     <BlogTopNav />
-    <main data-pagefind-body>
+    <main id="main-content" data-pagefind-body>
       <BlogArchive page={page} postOffset={postOffset} />
     </main>
     <Footer />

@@ -11,12 +11,13 @@ import { getAllSeries } from '../../../utils/content-groups';
 const { site, theme } = await getSiteConfig();
 const palette = theme.palette;
 const series = getAllSeries(await getCollection('blog', ({ data }) => !data.draft));
+const pageDescription = 'Browse connected blog series and reading paths.';
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-palette={palette}>
+<html lang="en" data-palette={palette}>
   <head>
-    <BaseHead title={`${site.title} | Series`} description={site.description} />
+    <BaseHead title={`${site.title} | Series`} description={pageDescription} />
     <style>
       main {
         width: min(100%, var(--layout-shell-width));
@@ -47,7 +48,7 @@ const series = getAllSeries(await getCollection('blog', ({ data }) => !data.draf
   </head>
   <body>
     <BlogTopNav />
-    <main data-pagefind-body>
+    <main id="main-content" data-pagefind-body>
       <BackLink href="/blog/" label="Back to blog" />
       <header class="archive-hero archive-header-shared page-header-spacing">
         <div class="archive-header-main">

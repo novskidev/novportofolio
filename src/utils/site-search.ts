@@ -4,6 +4,9 @@ type PagefindResult = {
     url: string;
     meta?: {
       title?: string;
+      tags?: string;
+      categories?: string;
+      series?: string;
     };
     excerpt: string;
   }>;
@@ -33,6 +36,7 @@ const pagefindPath = `${baseUrl.replace(/\/$/, '')}/pagefind/pagefind.js`.replac
 let pagefindPromise: Promise<PagefindModule> | null = null;
 let lastFocusedElement: HTMLElement | null = null;
 const searchLayers = new WeakMap<HTMLElement, HTMLElement>();
+const searchResultCache = new WeakMap<HTMLElement, Awaited<ReturnType<PagefindResult['data']>>[]>();
 
 function getSearchSurface(root: HTMLElement) {
   return searchLayers.get(root) ?? root;
@@ -71,16 +75,34 @@ function getResultPath(url: string) {
 function getResultKind(url: string) {
   const path = getResultPath(url);
 
-  if (/^\/blog\/[^/]+\/?$/.test(path)) return 'Blog note';
-  if (path.startsWith('/blog')) return 'Blog index';
-  if (path.startsWith('/vibe')) return 'Vibe';
-  if (path.startsWith('/projects')) return 'Project';
+  if (/^\/blog\/[^/]+\/?$/.test(path)) return { key: 'blog', label: 'Blog' };
+  if (path.startsWith('/blog')) return { key: 'blog', label: 'Blog' };
+  if (path.startsWith('/vibe')) return { key: 'vibe', label: 'Vibe' };
+  if (path.startsWith('/projects')) return { key: 'project', label: 'Project' };
 
-  return 'Page';
+  return { key: 'page', label: 'Page' };
 }
 
 function getResultTitle(result: Awaited<ReturnType<PagefindResult['data']>>) {
   return result.meta?.title?.trim() || getResultPath(result.url);
+}
+
+function getActiveFilter(root: HTMLElement) {
+  return (
+    querySearchSurface<HTMLButtonElement>(root, '[data-search-filter][aria-pressed="true"]')
+      ?.dataset.searchFilter || 'all'
+  );
+}
+
+function getFilteredResults(
+  root: HTMLElement,
+  results: Awaited<ReturnType<PagefindResult['data']>>[],
+) {
+  const activeFilter = getActiveFilter(root);
+
+  if (activeFilter === 'all') return results;
+
+  return results.filter((result) => getResultKind(result.url).key === activeFilter);
 }
 
 async function loadPagefind() {
@@ -146,31 +168,55 @@ function renderResults(root: HTMLElement, results: Awaited<ReturnType<PagefindRe
 
   list.replaceChildren();
 
-  for (const result of results) {
+  for (const result of getFilteredResults(root, results)) {
     const item = document.createElement('li');
     const link = document.createElement('a');
+    const heading = document.createElement('span');
+    const kind = document.createElement('span');
     const title = document.createElement('span');
     const meta = document.createElement('span');
+    const groups = document.createElement('span');
     const match = document.createElement('span');
     const matchLabel = document.createElement('span');
     const excerpt = document.createElement('span');
+    const resultKind = getResultKind(result.url);
+    const groupText = [result.meta?.categories, result.meta?.series, result.meta?.tags]
+      .filter(Boolean)
+      .join(' · ');
 
     link.href = normalizeResultUrl(result.url);
+    heading.className = 'site-search-result-heading';
+    kind.className = 'site-search-result-kind';
+    kind.textContent = resultKind.label;
     title.className = 'site-search-result-title';
     title.textContent = getResultTitle(result);
     meta.className = 'site-search-result-meta';
-    meta.textContent = `${getResultKind(result.url)} - ${getResultPath(result.url)}`;
+    meta.textContent = getResultPath(result.url);
+    groups.className = 'site-search-result-groups';
+    groups.textContent = groupText;
     match.className = 'site-search-result-match';
     matchLabel.className = 'site-search-result-match-label';
     matchLabel.textContent = 'Matched passage';
     excerpt.className = 'site-search-result-excerpt';
     excerpt.innerHTML = result.excerpt;
 
+    heading.append(kind, title);
     match.append(matchLabel, excerpt);
-    link.append(title, meta, match);
+    link.append(heading, meta);
+    if (groupText) link.append(groups);
+    link.append(match);
     item.append(link);
     list.append(item);
   }
+}
+
+function updateResultStatus(root: HTMLElement, visibleCount: number) {
+  setStatus(
+    root,
+    visibleCount > 0
+      ? `${visibleCount} result${visibleCount === 1 ? '' : 's'}`
+      : root.dataset.searchEmptyLabel || 'No notes found.',
+  );
 }
 
 function debounce<T extends (...args: any[]) => void>(callback: T, delay: number) {
@@ -192,6 +238,7 @@ export function initSiteSearch() {
     const input = root.querySelector<HTMLInputElement>('[data-site-search-input]');
     const layer = root.querySelector<HTMLElement>('[data-site-search-layer]');
     const closeButtons = root.querySelectorAll<HTMLButtonElement>('[data-site-search-close]');
+    const filterButtons = root.querySelectorAll<HTMLButtonElement>('[data-search-filter]');
     const maxResults = Number(root.dataset.searchMaxResults || 6);
 
     if (!trigger || !dialog || !input || !layer) continue;
@@ -208,6 +255,7 @@ export function initSiteSearch() {
     const close = () => {
       setExpanded(root, false);
       input.value = '';
+      searchResultCache.set(root, []);
       renderResults(root, []);
       setStatus(root, root.dataset.searchIdleLabel || 'Start typing to search.');
       lastFocusedElement?.focus?.();
@@ -244,14 +292,11 @@ export function initSiteSearch() {
           search.results.slice(0, maxResults).map((result) => result.data()),
         );
 
+        searchResultCache.set(root, resultData);
         renderResults(root, resultData);
-        setStatus(
-          root,
-          resultData.length > 0
-            ? `${resultData.length} result${resultData.length === 1 ? '' : 's'}`
-            : root.dataset.searchEmptyLabel || 'No notes found.',
-        );
+        updateResultStatus(root, getFilteredResults(root, resultData).length);
       } catch {
+        searchResultCache.set(root, []);
         renderResults(root, []);
         setStatus(
           root,
@@ -273,6 +318,19 @@ export function initSiteSearch() {
 
     for (const button of closeButtons) {
       button.addEventListener('click', close);
+    }
+
+    for (const button of filterButtons) {
+      button.addEventListener('click', () => {
+        for (const filterButton of filterButtons) {
+          filterButton.setAttribute('aria-pressed', String(filterButton === button));
+        }
+
+        const cachedResults = searchResultCache.get(root) ?? [];
+        renderResults(root, cachedResults);
+        if (input.value.trim())
+          updateResultStatus(root, getFilteredResults(root, cachedResults).length);
+      });
     }
 
     layer.addEventListener('click', (event) => {
@@ -305,5 +363,4 @@ document.addEventListener('keydown', (event) => {
   root.dispatchEvent(new CustomEvent('site-search:open'));
 });
 
-initSiteSearch();
 document.addEventListener('astro:page-load', initSiteSearch);

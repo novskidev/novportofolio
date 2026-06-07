@@ -27,7 +27,7 @@ const page = {
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-palette={palette}>
+<html lang="en" data-palette={palette}>
   <head>
     <BaseHead title={site.title} description={site.description} />
     <style>
@@ -46,7 +46,7 @@ const page = {
   </head>
   <body>
     <BlogTopNav />
-    <main data-pagefind-body>
+    <main id="main-content" data-pagefind-body>
       <BlogArchive page={page}>
         <GroupNav slot="after-header" />
       </BlogArchive>

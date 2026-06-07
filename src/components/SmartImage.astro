@@ -9,14 +9,30 @@ interface Props extends Omit<HTMLAttributes<'img'>, 'src'> {
   sizes?: string;
 }
 
-const { src, alt, widths, sizes, ...imageAttrs } = Astro.props;
+const {
+  src,
+  alt,
+  widths,
+  sizes,
+  loading = 'lazy',
+  decoding = 'async',
+  ...imageAttrs
+} = Astro.props;
 const shouldOptimize = typeof src !== 'string';
 ---
 
 {
   shouldOptimize ? (
-    <Image src={src} alt={alt} widths={widths} sizes={sizes} {...imageAttrs} />
+    <Image
+      src={src}
+      alt={alt}
+      widths={widths}
+      sizes={sizes}
+      loading={loading}
+      decoding={decoding}
+      {...imageAttrs}
+    />
   ) : (
-    <img src={src} alt={alt} sizes={sizes} {...imageAttrs} />
+    <img src={src} alt={alt} sizes={sizes} loading={loading} decoding={decoding} {...imageAttrs} />
   )
 }

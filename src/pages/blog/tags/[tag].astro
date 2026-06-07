@@ -37,12 +37,13 @@ export async function getStaticPaths() {
 const { site, theme } = await getSiteConfig();
 const palette = theme.palette;
 const { tag, page } = Astro.props;
+const pageDescription = `${tag.count} ${tag.count === 1 ? 'article' : 'articles'} tagged with ${tag.name}.`;
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-palette={palette}>
+<html lang="en" data-palette={palette}>
   <head>
-    <BaseHead title={`#${tag.name} | ${site.title}`} description={site.description} />
+    <BaseHead title={`#${tag.name} | ${site.title}`} description={pageDescription} />
     <style>
       main {
         width: min(100%, var(--layout-shell-width));
@@ -59,7 +60,7 @@ const { tag, page } = Astro.props;
   </head>
   <body>
     <BlogTopNav />
-    <main data-pagefind-body>
+    <main id="main-content" data-pagefind-body>
       <BackLink href="/blog/tags/" label="Back to tags" />
       <BlogArchive
         page={page}

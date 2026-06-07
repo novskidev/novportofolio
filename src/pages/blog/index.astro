@@ -4,13 +4,16 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import BlogTopNav from '../../components/blog/BlogTopNav.astro';
 import BlogArchive from '../../components/blog/BlogArchive.astro';
+import BlogTagCloud from '../../components/blog/BlogTagCloud.astro';
 import GroupNav from '../../components/blog/GroupNav.astro';
 import { getSiteConfig } from '../../data/site';
+import { getAllTags } from '../../utils/content-groups';
 import { sortByDateDesc } from '../../utils/content-dates';
 
 const { site, theme, blog } = await getSiteConfig();
 const palette = theme.palette;
 const posts = sortByDateDesc(await getCollection('blog', ({ data }) => !data.draft));
+const tags = getAllTags(posts);
 const postsPerPage = blog.postsPerPage;
 const totalPages = Math.max(1, Math.ceil(posts.length / postsPerPage));
 const page = {
@@ -49,6 +52,7 @@ const page = {
     <main id="main-content" data-pagefind-body>
       <BlogArchive page={page}>
         <GroupNav slot="after-header" />
+        <BlogTagCloud slot="side" tags={tags} />
       </BlogArchive>
     </main>
     <Footer />

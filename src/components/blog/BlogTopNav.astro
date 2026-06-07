@@ -69,13 +69,18 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
     <Menu size={18} stroke-width={2} />
   </button>
 
-  <a class="brand" href={withBase('/')} aria-label={`Go to ${site.title} home`}>
-    <span class="brand-mark" aria-hidden="true"></span>
-    <span class="brand-title">
+  <span class="brand">
+    <button
+      class="brand-mark"
+      type="button"
+      aria-label="Change accent color"
+      title="Change accent color"
+      data-palette-toggle></button>
+    <a class="brand-title" href={withBase('/')} aria-label={`Go to ${site.title} home`}>
       <span>{site.title}</span>
       {brandRouteLabel && <span class="brand-route"> · {brandRouteLabel}</span>}
-    </span>
-  </a>
+    </a>
+  </span>
 
   <nav class="nav-links" aria-label="Article navigation">
     {
@@ -391,6 +396,7 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
   }
 
   .brand,
+  .brand-title,
   a.nav-link,
   a.mobile-menu-link,
   .mobile-toc-panel a {
@@ -405,12 +411,29 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
     font-weight: 700;
   }
 
+  .brand-title {
+    min-width: 0;
+  }
+
   .brand-mark {
     width: 11px;
     height: 11px;
+    padding: 0;
+    border: 0;
     border-radius: 50%;
     background: var(--paper-accent);
     box-shadow: none;
+    cursor: pointer;
+    transition:
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .brand-mark:hover,
+  .brand-mark:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--paper-accent) 18%, transparent);
+    transform: scale(1.18);
   }
 
   .nav-links {

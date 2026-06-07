@@ -76,6 +76,7 @@ function mountScrollRevealMotion() {
     '.category-card',
     '.series-card',
     '.tag-cloud a',
+    '.blog-tag-cloud a',
     '.vibe-item',
     '.related-posts',
   ].join(',');
@@ -108,11 +109,13 @@ function mountHoverMotion() {
       '.nav-link',
       '.mobile-menu-link',
       '.tag-cloud a',
+      '.blog-tag-cloud a',
       '.related-posts a',
       '.post-group',
       '.post-tag',
       '.group-link',
       '.site-search-trigger',
+      '.brand-mark',
     ].join(','),
     'framerHoverMounted',
   );
@@ -147,7 +150,10 @@ function mountHoverMotion() {
 }
 
 function mountThemeToggleMotion() {
-  for (const button of getElements('[data-theme-toggle]', 'framerThemeMounted')) {
+  for (const button of getElements(
+    '[data-theme-toggle], [data-palette-toggle]',
+    'framerThemeMounted',
+  )) {
     button.dataset.framerThemeMounted = 'true';
 
     const click = () => {

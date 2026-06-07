@@ -37,6 +37,7 @@ const {
 } = Astro.props;
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const hasPagination = page.lastPage > 1;
+const hasSide = Astro.slots.has('side');
 
 function withBase(href: string) {
   if (href === '/') {
@@ -59,112 +60,128 @@ function getPageHref(pageNumber: number) {
   <p class="archive-note">{headerNote}</p>
 </header>
 <slot name="after-header" />
-<section>
-  <ul class="post-stack">
-    {
-      page.data.map((post, index) => (
-        <li class="post-item">
-          <article class:list={['post-link', { 'without-thumb': !post.data.heroImage }]}>
-            <div class="post-copy">
-              <div>
-                <span class="post-index">{String(postOffset + index + 1).padStart(2, '0')}</span>
-                <h2 class="title">
-                  <a class="title-link" href={withBase(`/blog/${post.id}/`)}>
-                    {post.data.title}
-                  </a>
-                </h2>
-                <div class="date">
-                  <FormattedDate date={post.data.date} />
-                  {post.data.categories.length > 0 && (
-                    <span class="post-groups">
-                      <span class="meta-label">Categories</span>
-                      {post.data.categories.map((category) => (
-                        <a
-                          class="post-group"
-                          href={withBase(`/blog/categories/${slugifyGroupName(category)}/`)}
-                        >
-                          {category}
-                        </a>
-                      ))}
+<div class:list={['archive-body', { 'with-side': hasSide }]}>
+  <div class="archive-main">
+    <section>
+      <ul class="post-stack">
+        {
+          page.data.map((post, index) => (
+            <li class="post-item">
+              <article class:list={['post-link', { 'without-thumb': !post.data.heroImage }]}>
+                <div class="post-copy">
+                  <div>
+                    <span class="post-index">
+                      {String(postOffset + index + 1).padStart(2, '0')}
                     </span>
-                  )}
-                  {post.data.series.length > 0 && (
-                    <span class="post-groups">
-                      <span class="meta-label">Series</span>
-                      {post.data.series.map((series) => (
-                        <a
-                          class="post-group"
-                          href={withBase(`/blog/series/${slugifyGroupName(series)}/`)}
-                        >
-                          {series}
-                        </a>
-                      ))}
-                    </span>
-                  )}
-                  {post.data.tags.length > 0 && (
-                    <span class="post-tags">
-                      {post.data.tags.map((tag) => (
-                        <a class="post-tag" href={withBase(`/blog/tags/${slugifyGroupName(tag)}/`)}>
-                          #{tag}
-                        </a>
-                      ))}
-                    </span>
-                  )}
+                    <h2 class="title">
+                      <a class="title-link" href={withBase(`/blog/${post.id}/`)}>
+                        {post.data.title}
+                      </a>
+                    </h2>
+                    <div class="date">
+                      <FormattedDate date={post.data.date} />
+                      {post.data.categories.length > 0 && (
+                        <span class="post-groups">
+                          <span class="meta-label">Categories</span>
+                          {post.data.categories.map((category) => (
+                            <a
+                              class="post-group"
+                              href={withBase(`/blog/categories/${slugifyGroupName(category)}/`)}
+                            >
+                              {category}
+                            </a>
+                          ))}
+                        </span>
+                      )}
+                      {post.data.series.length > 0 && (
+                        <span class="post-groups">
+                          <span class="meta-label">Series</span>
+                          {post.data.series.map((series) => (
+                            <a
+                              class="post-group"
+                              href={withBase(`/blog/series/${slugifyGroupName(series)}/`)}
+                            >
+                              {series}
+                            </a>
+                          ))}
+                        </span>
+                      )}
+                      {post.data.tags.length > 0 && (
+                        <span class="post-tags">
+                          {post.data.tags.map((tag) => (
+                            <a
+                              class="post-tag"
+                              href={withBase(`/blog/tags/${slugifyGroupName(tag)}/`)}
+                            >
+                              #{tag}
+                            </a>
+                          ))}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <p class="post-excerpt">{post.data.description}</p>
                 </div>
-              </div>
-              <p class="post-excerpt">{post.data.description}</p>
-            </div>
-            {post.data.heroImage && (
-              <a
-                class="thumb-wrap"
-                href={withBase(`/blog/${post.id}/`)}
-                aria-label={post.data.title}
-              >
-                <SmartImage width={520} height={360} src={post.data.heroImage} alt="" />
-              </a>
-            )}
-          </article>
-        </li>
-      ))
-    }
-  </ul>
-</section>
-{
-  hasPagination && (
-    <nav class="archive-pagination" aria-label="Blog pagination">
-      <a
-        class:list={['pagination-link', { disabled: !page.url.prev }]}
-        href={page.url.prev ? withBase(page.url.prev) : undefined}
-        aria-disabled={!page.url.prev}
-      >
-        Previous
-      </a>
-      <div class="pagination-pages" aria-label={`Page ${page.currentPage} of ${page.lastPage}`}>
-        {Array.from({ length: page.lastPage }, (_, index) => {
-          const pageNumber = index + 1;
-          const isCurrent = pageNumber === page.currentPage;
+                {post.data.heroImage && (
+                  <a
+                    class="thumb-wrap"
+                    href={withBase(`/blog/${post.id}/`)}
+                    aria-label={post.data.title}
+                  >
+                    <SmartImage width={520} height={360} src={post.data.heroImage} alt="" />
+                  </a>
+                )}
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+    {
+      hasPagination && (
+        <nav class="archive-pagination" aria-label="Blog pagination">
+          <a
+            class:list={['pagination-link', { disabled: !page.url.prev }]}
+            href={page.url.prev ? withBase(page.url.prev) : undefined}
+            aria-disabled={!page.url.prev}
+          >
+            Previous
+          </a>
+          <div class="pagination-pages" aria-label={`Page ${page.currentPage} of ${page.lastPage}`}>
+            {Array.from({ length: page.lastPage }, (_, index) => {
+              const pageNumber = index + 1;
+              const isCurrent = pageNumber === page.currentPage;
 
-          return (
-            <a
-              class:list={['pagination-number', { current: isCurrent }]}
-              href={withBase(getPageHref(pageNumber))}
-              aria-current={isCurrent ? 'page' : undefined}
-            >
-              {pageNumber}
-            </a>
-          );
-        })}
-      </div>
-      <a
-        class:list={['pagination-link', { disabled: !page.url.next }]}
-        href={page.url.next ? withBase(page.url.next) : undefined}
-        aria-disabled={!page.url.next}
-      >
-        Next
-      </a>
-    </nav>
-  )
-}
+              return (
+                <a
+                  class:list={['pagination-number', { current: isCurrent }]}
+                  href={withBase(getPageHref(pageNumber))}
+                  aria-current={isCurrent ? 'page' : undefined}
+                >
+                  {pageNumber}
+                </a>
+              );
+            })}
+          </div>
+          <a
+            class:list={['pagination-link', { disabled: !page.url.next }]}
+            href={page.url.next ? withBase(page.url.next) : undefined}
+            aria-disabled={!page.url.next}
+          >
+            Next
+          </a>
+        </nav>
+      )
+    }
+  </div>
+  {
+    hasSide && (
+      <aside class="archive-side">
+        <slot name="side" />
+      </aside>
+    )
+  }
+</div>
 
 <style>
   .post-stack {
@@ -172,6 +189,23 @@ function getPageHref(pageNumber: number) {
     gap: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .archive-body.with-side {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 270px);
+    gap: 42px;
+    align-items: start;
+  }
+
+  .archive-main {
+    min-width: 0;
+  }
+
+  .archive-side {
+    position: sticky;
+    top: 106px;
+    min-width: 0;
   }
 
   .post-item {
@@ -444,6 +478,16 @@ function getPageHref(pageNumber: number) {
   }
 
   @media (max-width: 720px) {
+    .archive-body.with-side {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .archive-side {
+      position: static;
+      order: -1;
+    }
+
     .post-link,
     .post-item:first-child .post-link {
       grid-template-columns: 1fr;

@@ -23,10 +23,6 @@ bun-debug.log*
 .env.*
 !.env.example
 
-# Generated font files
-scripts/fonts/ui-chars.txt
-public/fonts/lxgw-ui-subset.woff2
-
 # Search index / generated artifacts
 dist/pagefind/
 

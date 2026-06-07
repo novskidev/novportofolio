@@ -59,10 +59,23 @@ function serializeJsonLd(value: unknown) {
 <script is:inline>
   (() => {
     const storageKey = 'novskidev-theme';
+    const paletteStorageKey = 'novskidev-palette';
+    const palettes = [
+      'green-soft',
+      'green-vivid',
+      'rose-soft',
+      'pink-soft',
+      'purple-soft',
+      'blue-soft',
+      'orange-soft',
+      'brown-soft',
+    ];
     const root = document.documentElement;
     const themeMeta = () => document.querySelector('meta[name="theme-color"]');
     const themeColor = (theme) => (theme === 'dark' ? '#171b18' : '#f4f1e8');
     const normalizeTheme = (theme) => (theme === 'dark' ? 'dark' : 'light');
+    const normalizePalette = (palette) =>
+      palettes.includes(palette) ? palette : root.dataset.palette || 'green-soft';
     const systemTheme = () =>
       window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     const storedTheme = () => {
@@ -77,7 +90,20 @@ function serializeJsonLd(value: unknown) {
         localStorage.setItem(storageKey, theme);
       } catch {}
     };
+    const storedPalette = () => {
+      try {
+        return localStorage.getItem(paletteStorageKey);
+      } catch {
+        return null;
+      }
+    };
+    const setStoredPalette = (palette) => {
+      try {
+        localStorage.setItem(paletteStorageKey, palette);
+      } catch {}
+    };
     const currentTheme = () => root.dataset.theme || storedTheme() || systemTheme();
+    const currentPalette = () => normalizePalette(storedPalette() || root.dataset.palette);
     const applyThemeToRoot = (targetRoot, theme) => {
       const nextTheme = normalizeTheme(theme);
 
@@ -85,6 +111,14 @@ function serializeJsonLd(value: unknown) {
       targetRoot.style.colorScheme = nextTheme;
 
       return nextTheme;
+    };
+    const getPaletteLabel = (palette) => palette.replace(/-/g, ' ');
+    const applyPaletteToRoot = (targetRoot, palette) => {
+      const nextPalette = normalizePalette(palette);
+
+      targetRoot.dataset.palette = nextPalette;
+
+      return nextPalette;
     };
     const applyTheme = (theme, persist = true) => {
       const nextTheme = applyThemeToRoot(root, theme);
@@ -100,10 +134,31 @@ function serializeJsonLd(value: unknown) {
         new CustomEvent('novskidev:theme-change', { detail: { theme: nextTheme } }),
       );
     };
+    const applyPalette = (palette, persist = true) => {
+      const nextPalette = applyPaletteToRoot(root, palette);
+      const label = `Change accent color. Current: ${getPaletteLabel(nextPalette)}`;
+
+      for (const button of document.querySelectorAll('[data-palette-toggle]')) {
+        button.setAttribute('aria-label', label);
+        button.setAttribute('title', label);
+      }
+      if (persist) setStoredPalette(nextPalette);
+      window.dispatchEvent(
+        new CustomEvent('novskidev:palette-change', { detail: { palette: nextPalette } }),
+      );
+    };
+    const cyclePalette = () => {
+      const currentIndex = palettes.indexOf(currentPalette());
+      const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % palettes.length;
+
+      applyPalette(palettes[nextIndex]);
+    };
     const syncThemeControls = () => {
       applyTheme(currentTheme(), false);
+      applyPalette(currentPalette(), false);
     };
 
+    applyPalette(currentPalette(), false);
     applyTheme(storedTheme() || systemTheme(), false);
 
     if (!window.__novskidevTheme) {
@@ -111,6 +166,12 @@ function serializeJsonLd(value: unknown) {
         toggle() {
           applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
         },
+      };
+    }
+
+    if (!window.__novskidevPalette) {
+      window.__novskidevPalette = {
+        next: cyclePalette,
       };
     }
 
@@ -124,11 +185,15 @@ function serializeJsonLd(value: unknown) {
     document.addEventListener('click', (event) => {
       const toggle = event.target.closest?.('[data-theme-toggle]');
       if (toggle) window.__novskidevTheme.toggle();
+
+      const paletteToggle = event.target.closest?.('[data-palette-toggle]');
+      if (paletteToggle) window.__novskidevPalette.next();
     });
 
     document.addEventListener('DOMContentLoaded', syncThemeControls, { once: true });
     document.addEventListener('astro:before-swap', (event) => {
       const nextTheme = applyThemeToRoot(event.newDocument.documentElement, currentTheme());
+      applyPaletteToRoot(event.newDocument.documentElement, currentPalette());
 
       event.newDocument
         .querySelector('meta[name="theme-color"]')

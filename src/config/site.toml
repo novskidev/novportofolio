@@ -4,7 +4,7 @@ description = "Personal portfolio and writing space of Novian Nadari."
 pageTitle = "Novskidev | Portfolio of Novian Nadari"
 pageDescription = "Portfolio, projects, notes, and digital presence of Novian Nadari."
 repository = "https://github.com/novskidev"
-footerNote = "Built and maintained by Novian Nadari."
+footerNote = "Built and maintained by Novian Nadari not AI."
 
 [config.vibe]
 showTrail = true

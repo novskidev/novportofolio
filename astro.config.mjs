@@ -8,6 +8,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 import expressiveCode from 'astro-expressive-code';
 
+import cloudflare from '@astrojs/cloudflare';
+
 const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
 const customSite = process.env.SITE_URL;
 const customBase = process.env.SITE_BASE;
@@ -38,4 +40,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: cloudflare(),
 });

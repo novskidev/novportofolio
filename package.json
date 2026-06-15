@@ -9,7 +9,7 @@
     "dev": "astro dev",
     "content:check": "bun scripts/validate-content.ts",
     "build": "bun run content:check && astro build && pagefind --site dist --output-subdir pagefind --root-selector main --exclude-selectors \"[data-pagefind-ignore]\" --force-language en",
-    "preview": "astro preview",
+    "preview": "bun run build && wrangler dev",
     "astro": "astro",
     "post:new": "bun scripts/new-content.ts blog",
     "project:new": "bun scripts/new-content.ts project",
@@ -17,9 +17,12 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "bun run lint && prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate-types": "wrangler types",
+    "deploy": "bun run build && wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.7.0",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
@@ -43,9 +46,13 @@
     "pagefind": "^1.5.2",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.100.0"
   },
   "lint-staged": {
     "*": "bun run format:check"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }

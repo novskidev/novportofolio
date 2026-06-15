@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "content:check": "bun scripts/validate-content.ts",
-    "build": "bun run content:check && astro build && pagefind --site dist --output-subdir pagefind --root-selector main --exclude-selectors \"[data-pagefind-ignore]\" --force-language en",
+    "content:check": "node scripts/validate-content.ts",
+    "build": "node scripts/validate-content.ts && astro build && pagefind --site dist --output-subdir pagefind --root-selector main --exclude-selectors \"[data-pagefind-ignore]\" --force-language en",
     "preview": "astro preview",
     "astro": "astro",
     "post:new": "bun scripts/new-content.ts blog",
@@ -43,7 +43,7 @@
     "pagefind": "^1.5.2",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "typescript": "^6.0.3"
+    "typescript": "^5.9.3"
   },
   "lint-staged": {
     "*": "bun run format:check"

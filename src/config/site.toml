@@ -23,9 +23,9 @@ preserveIndent = true
 collapseStyle = "collapsible-auto"
 
 [config.comments]
-enabled = false
-provider = "none"
-show_on_posts = false
+enabled = true
+provider = "giscus"
+show_on_posts = true
 
 [config.search]
 enabled = true
@@ -37,10 +37,10 @@ maxResults = 6
 postsPerPage = 6
 
 [config.comments.giscus]
-repo = ""
-repo_id = ""
-category = ""
-category_id = ""
+repo = "novskidev/novportofolio"
+repo_id = "R_kgDOSw-oKA"
+category = "General"
+category_id = "DIC_kwDOSw-oKM4C_QbX"
 mapping = "pathname"
 strict = "0"
 reactions_enabled = "1"

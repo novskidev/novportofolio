@@ -1,0 +1,248 @@
+---
+title: 'Hermes Agent vs OpenClaw: Why I Finally Chose Hermes'
+description: 'A personal note on using Hermes Agent and OpenClaw on my VPS: resource usage, Telegram gateway, memory, skills, cronjobs, and why Hermes feels better as my daily AI agent.'
+date: '2026-07-10T06:24:17.287Z'
+draft: false
+showHeroImage: false
+tags: ['AI Agent', 'Hermes Agent', 'OpenClaw', 'Self Hosted', 'VPS']
+categories: ['AI', 'Tools', 'Self Hosting']
+series: []
+comments: true
+sidebar:
+  enable: true
+  toc: true
+  relatedPosts: true
+---
+
+# Hermes Agent vs OpenClaw: Why I Finally Chose Hermes
+
+Over the past few weeks, I have been experimenting quite a lot with self-hosted AI agents. Not just regular chatbots, but agents that can actually help me work: accessing the terminal, reading files, creating schedules, running through Telegram, remembering context, and even helping me create content.
+
+Two tools I tried were **OpenClaw** and **Hermes Agent**.
+
+At first, I was interested in OpenClaw because the idea looked promising. It belongs to the same category of modern AI agents that can use tools, automate tasks, and assist with technical work.
+
+But after running it on my VPS and comparing it with my daily workflow, I eventually became more comfortable with **Hermes Agent**.
+
+This article is not a scientific benchmark. It is more of a personal note about what felt useful, what did not fit my setup, and why Hermes became my daily driver.
+
+## My Setup
+
+I run my AI agent on a CPU-only Ubuntu VPS without an NVIDIA GPU. The server resources are not huge:
+
+- around 8 vCPU
+- around 11 GB RAM
+- several other services running, such as Hermes, Ollama, MySQL/MariaDB, Apache, Docker, and other server tools
+- Telegram as the main interface
+- occasional use for content scheduling, cronjobs, memory, and small automations
+
+So for me, the ideal AI agent is not just the one with the most features. It also needs to be:
+
+1. **stable on a small VPS**
+2. **not too heavy on resources**
+3. **comfortable to use from Telegram**
+4. **capable of remembering context across sessions**
+5. **configurable with tools and skills**
+6. **useful for real work, not just chatting**
+
+This is where the difference between Hermes and OpenClaw started to become clear.
+
+## My Experience with OpenClaw
+
+OpenClaw is interesting as a concept. It has an ambitious agentic approach, and for people who enjoy exploring new AI tools, OpenClaw is definitely worth trying.
+
+But in my own setup, OpenClaw eventually felt less suitable for long-term daily use.
+
+One of the most noticeable things was resource usage. When I checked my VPS, OpenClaw was using around **396 MB of RAM**. That number may not be a big deal if your server has plenty of resources, but on a VPS that also runs many other services, it matters.
+
+After removing OpenClaw, my RAM usage improved:
+
+| Condition                |  Used RAM | Available RAM |
+| ------------------------ | --------: | ------------: |
+| Before removing OpenClaw | ± 2.7 GiB |     ± 9.0 GiB |
+| After removing OpenClaw  | ± 2.3 GiB |     ± 9.4 GiB |
+
+To be clear, this does not mean OpenClaw is bad. It simply means it was not the best fit for my own setup.
+
+I needed an agent that could stay on my server continuously without making me worry too much about resources.
+
+I also needed something that felt deeply connected to my daily workflow: Telegram, cronjobs, memory, skills, content creation, backups, and server automation.
+
+In that area, Hermes felt more mature for my personal needs.
+
+## My Experience with Hermes Agent
+
+Hermes Agent feels more suitable as my daily AI agent because it is not just “an agent that can run in the terminal.” It feels more like a personal assistant system that can live across multiple interfaces.
+
+The biggest thing I noticed is the integration.
+
+I can talk to Hermes through Telegram, and it can still:
+
+- read files on my server
+- run terminal commands
+- manage cronjobs
+- create and use skills
+- remember my preferences
+- help me write content
+- help me schedule posts
+- check server status
+- troubleshoot services
+- run fairly long workflows
+
+For me, this matters a lot because I do not always want to SSH into my VPS just to ask an agent to do something.
+
+Sometimes, I just want to send a Telegram message like:
+
+> “Is the server alive?”
+> “Check the RAM.”
+> “Create a thread and schedule it.”
+> “Back up Hermes.”
+> “Help me debug this config.”
+
+And Hermes can actually work with the available tools.
+
+That makes Hermes feel like a real assistant living inside my VPS.
+
+## The Hermes Features That Matter Most to Me
+
+### 1. Persistent Memory
+
+Hermes can remember important preferences and context. For example, it can remember my writing style, server setup, Obsidian vault location, content workflow, and technical habits.
+
+This makes the experience much smoother. I do not have to explain everything from zero again and again.
+
+For example, in my content workflow, Hermes already knows that I often create Indonesian content in a casual tone, usually for X or Threads, and that I prefer practical formats.
+
+For me, this is one of the most important features of a modern AI agent: not just answering questions, but carrying useful context from previous sessions.
+
+### 2. Skills
+
+Hermes has a concept called **skills**, which are reusable procedures or workflows.
+
+This feels like giving the agent its own working notes.
+
+If there is a workflow I use often, Hermes can save it as a skill. Later, when a similar task appears, Hermes can load that skill again.
+
+This feels different from an agent that always starts from an empty prompt. With skills, Hermes can gradually become more aligned with the way I work.
+
+I see this as one of Hermes’ strongest advantages: the agent can improve over time based on the user’s workflow.
+
+### 3. Cronjobs
+
+Hermes can also create scheduled tasks. This is useful for things like:
+
+- automatic backups
+- reminders
+- monitoring
+- recurring reports
+- checking feeds or data periodically
+- sending scheduled updates back to Telegram
+
+In my setup, I even use Hermes for daily backups to a GitHub repository. So it is not just a chat assistant. It is part of my operational workflow.
+
+### 4. Telegram Gateway
+
+This is probably one of the biggest reasons why I enjoy using Hermes.
+
+Hermes can run through Telegram as a gateway. Since I often use my phone, this makes the agent much more accessible.
+
+I do not have to sit in front of my laptop, open a terminal, and type long commands. I can simply send a message from Telegram, and Hermes still has access to tools on the server.
+
+This makes Hermes feel like a personal assistant that lives on my VPS.
+
+## Hermes vs OpenClaw in Daily Use
+
+If I simplify my experience, it looks like this:
+
+| Aspect                   | OpenClaw                                                 | Hermes Agent                            |
+| ------------------------ | -------------------------------------------------------- | --------------------------------------- |
+| First impression         | Interesting for experimentation                          | More ready as a daily driver            |
+| Resource usage on my VPS | Felt heavier for my setup                                | More suitable for my setup              |
+| Telegram workflow        | Not as strong for my needs                               | Very suitable                           |
+| Memory                   | Has an agentic direction, but I did not use it long-term | Very useful in daily use                |
+| Reusable procedures      | Did not become my main workflow                          | Skills became important                 |
+| Cron/scheduled tasks     | Not the main reason I used it                            | Very useful                             |
+| Best for                 | Exploring agentic tools                                  | Personal assistant and daily automation |
+
+OpenClaw may still be a good choice for people who want to explore agentic coding workflows or try a different approach.
+
+But for me, Hermes wins because it feels more practical and more connected to my daily workflow.
+
+## What I Like About Hermes
+
+What I like most about Hermes is that it feels like a system that can grow.
+
+On day one, you might only use it for chat and terminal access. But over time, it can evolve:
+
+- it has memory
+- it has skills
+- it has cronjobs
+- it has gateways
+- it can connect to other tools
+- it can help with writing
+- it can help manage the server
+- it can help create content
+- it can help automate repetitive tasks
+
+So Hermes is not just one application. It feels more like an agent layer on top of my server.
+
+And because I personally like self-hosted tools, Linux, open-source software, and workflows that can be customized, Hermes feels like a very good fit.
+
+## The Downsides of Hermes
+
+Of course, Hermes is not perfect.
+
+There are still some things to keep in mind:
+
+1. **The initial setup can feel technical**
+   If you are not familiar with YAML config, API providers, gateways, or Linux terminals, setting up Hermes may feel a bit intimidating.
+
+2. **Some troubleshooting is still needed**
+   When integrations like MCP, OAuth, Buffer, or certain providers fail, you may still need to debug things manually.
+
+3. **The experience depends heavily on the model**
+   Hermes is an agent framework. The quality of its answers still depends on the model or provider you use.
+
+4. **The configuration can become complex**
+   Memory, tools, MCP, gateway, cron, providers, profiles — all of these are powerful, but they also need to be organized properly.
+
+For me, these downsides are still acceptable because Hermes is a flexible tool. And the more flexible a tool is, the more configuration it usually has.
+
+## So, Which One Is Better?
+
+The short answer is: it depends on your needs.
+
+If your goal is to explore a new AI agent tool, OpenClaw is interesting and worth trying.
+
+But if I have to choose one tool for daily use on my VPS, I choose:
+
+**Hermes Agent.**
+
+The reason is simple: Hermes fits my workflow better.
+
+I need an agent that can:
+
+- run reliably on a VPS
+- be accessed from Telegram
+- remember context
+- save reusable skills
+- create cronjobs
+- help with content
+- help manage the server
+- continue across sessions without starting from zero every time
+
+So far, Hermes does that better for my needs.
+
+## Final Thoughts
+
+For me, the biggest difference between Hermes and OpenClaw is not only about technical features. It is about how they feel in daily use.
+
+OpenClaw feels like an interesting agentic tool to explore.
+
+Hermes feels like an assistant that I can maintain, train, and use every day.
+
+If you have a small VPS, enjoy self-hosting, often work from Telegram, and want an AI agent that can remember your workflow, Hermes Agent is very much worth trying.
+
+Not because it is perfect, but because it is practical.
+
+And in daily use, being practical often matters more than simply looking advanced.

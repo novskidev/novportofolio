@@ -1,0 +1,42 @@
+---
+title: 'Why I Left Opencode and Use Pi Instead'
+description: 'Opencode eats ~318 MB of RAM per agent and takes a second just to render. Pi uses ~76 MB, starts in ~600 ms, and only loads the extensions I install.'
+date: '2026-09-10T03:38:29.000Z'
+draft: false
+showHeroImage: false
+tags: [opencode, pi, ai-agents, tooling]
+categories: [Notes]
+series: []
+comments: true
+sidebar:
+  enable: true
+  toc: true
+  relatedPosts: true
+---
+
+# Why I Left Opencode and Use Pi Instead
+
+I used opencode for a while. It is capable — but two things kept bothering me: it is heavy, and it ships more than I need. Pi fixed both, so I switched. Here are the numbers and the reasoning.
+
+## Opencode is heavy
+
+The bottleneck to massive parallelism is resource efficiency. Spawn dozens of agents and RAM consumption balloons — unfeasible on most consumer machines. When each agent takes hundreds of megabytes, you run a handful and queue your work behind them.
+
+Measured on the same machine, per agent process:
+
+| Tool     | RAM per agent     |
+| -------- | ----------------- |
+| OpenCode | ~318.4 MB (32.2x) |
+| Pi       | ~76.5 MB (7.7x)   |
+
+Startup is not close either. Time to first input — how long until you can actually type — is 1047.9 ms on OpenCode versus 596.4 ms on Pi. Time to first frame is 1035.9 ms versus 590.7 ms. On my machine that difference is felt every single session: Pi is interactive before OpenCode has even rendered.
+
+Spawning another Pi agent is a non-decision. Spawning another OpenCode agent is a resource calculation. That alone ended the debate for me.
+
+## Pi is simple: plug-and-play extensions
+
+The second reason is philosophy. Pi is light because its extensions are plug-and-play — I install only what I actually use, nothing more. Opencode, by contrast, arrives as a full cockpit: providers, agents, themes, keybindings, all demanding attention before I write a single line of code. I do not enjoy tuning tools; I enjoy shipping with them. Pi stays out of the way and lets me add capability exactly when I need it.
+
+## Bottom line
+
+Opencode is the better choice if you want a fully customized agent cockpit and you are willing to feed it RAM and maintenance. I left because I want the opposite: a tool light enough to spawn without thinking, simple enough to install only what I need. Pi is both.

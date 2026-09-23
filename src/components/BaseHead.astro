@@ -3,6 +3,9 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import mapleMono400 from '@fontsource/maple-mono/files/maple-mono-latin-400-normal.woff2?url';
+import mapleMono700 from '@fontsource/maple-mono/files/maple-mono-latin-700-normal.woff2?url';
 import FallbackImage from '../assets/figure/fail-loading-image.png';
 import { getSiteConfig } from '../data/site';
 import { ClientRouter } from 'astro:transitions';
@@ -18,7 +21,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const assetPath = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 const { title, description, image = FallbackImage, type = 'website' } = Astro.props;
-const imageUrl = typeof image === 'string' ? image : image.src;
+const imageUrl =
+  typeof image === 'string'
+    ? image
+    : (
+        await getImage({
+          src: image,
+          width: 1200,
+          height: 630,
+          format: 'jpeg',
+          quality: 78,
+          fit: 'cover',
+        })
+      ).src;
 const { site, profile } = await getSiteConfig();
 const siteUrl = new URL('/', Astro.site).toString();
 const jsonLd = [
@@ -207,9 +222,13 @@ function serializeJsonLd(value: unknown) {
     });
   })();
 </script>
-<link rel="icon" type="image/png" href={assetPath('images/Novskidev.png')} />
-<link rel="apple-touch-icon" href={assetPath('images/Novskidev.png')} />
+<link rel="icon" type="image/png" sizes="32x32" href={assetPath('favicon-32x32.png')} />
+<link rel="icon" type="image/png" sizes="96x96" href={assetPath('favicon-96x96.png')} />
+<link rel="apple-touch-icon" href={assetPath('apple-touch-icon.png')} />
 <link rel="manifest" href={assetPath('manifest.json')} />
+<link rel="preconnect" href="https://api.github.com" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href={mapleMono400} crossorigin />
+<link rel="preload" as="font" type="font/woff2" href={mapleMono700} crossorigin />
 <meta name="theme-color" content="#f4f1e8" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
@@ -235,6 +254,8 @@ function serializeJsonLd(value: unknown) {
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(imageUrl, Astro.url)} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
@@ -244,7 +265,5 @@ function serializeJsonLd(value: unknown) {
 <meta property="twitter:image" content={new URL(imageUrl, Astro.url)} />
 <script type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
 <script>
-  import { mountFramerAnimations } from '../utils/framer-animations';
-
-  mountFramerAnimations();
+  import '../utils/reveal';
 </script>

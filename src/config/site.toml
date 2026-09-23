@@ -74,7 +74,7 @@ email = "novskidev@gmail.com"
 website = "https://novski.dev/"
 github = "https://github.com/novskidev"
 meta = "Personal portfolio"
-avatar = "/images/Novskidev.png"
+avatar = "/images/avatar.webp"
 
 [[config.topNav.links]]
 label = "About"
@@ -100,7 +100,6 @@ text = [
   "A space for my projects, ideas, notes,",
   "and everything I want to put out into the world.",
 ]
-image = "/images/logo-with-name.png"
 
 [config.home.intro]
 title = "I'm Novian 👋"
@@ -109,7 +108,6 @@ body = [
   "This site collects my projects, notes, experiments, and professional profile in one place.",
   "The goal is simple: make my work easy to find, easy to read, and easy to grow over time.",
 ]
-image = "/images/logo-cat.png"
 
 [config.home.latest]
 count = 1

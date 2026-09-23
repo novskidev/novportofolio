@@ -15,8 +15,9 @@
     "project:new": "bun scripts/new-content.ts project",
     "vibe:new": "bun scripts/new-content.ts vibe",
     "lint": "eslint .",
+    "css:check": "grep -rh '@media' src | grep -o '[0-9]*px' | grep -vE '^(640|720|721|900|901|1180|1181)px$' && echo 'Unknown breakpoint above. Allowed: 640/720/900/1180' && exit 1 || exit 0",
     "format": "prettier --write .",
-    "format:check": "bun run lint && prettier --check .",
+    "format:check": "bun run lint && bun run css:check && prettier --check .",
     "prepare": "husky"
   },
   "dependencies": {
@@ -30,7 +31,6 @@
     "astro": "^6.3.5",
     "astro-expressive-code": "^0.42.0",
     "lucide-astro": "^0.556.0",
-    "motion": "^12.40.0",
     "sharp": "^0.34.5",
     "smol-toml": "^1.6.1",
     "tailwindcss": "^4.3.0"

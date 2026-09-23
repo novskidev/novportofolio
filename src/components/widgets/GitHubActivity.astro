@@ -246,6 +246,30 @@ const { username, weeks = 18 } = Astro.props;
     }
   }
 
+  const CACHE_TTL = 30 * 60 * 1000;
+
+  function readCache(username: string) {
+    try {
+      const raw = sessionStorage.getItem(`novskidev-gh:${username}`);
+      if (!raw) return null;
+      const cached = JSON.parse(raw) as { ts: number; events: GitHubEvent[] };
+      return Date.now() - cached.ts < CACHE_TTL ? cached.events : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeCache(username: string, events: GitHubEvent[]) {
+    try {
+      sessionStorage.setItem(
+        `novskidev-gh:${username}`,
+        JSON.stringify({ ts: Date.now(), events }),
+      );
+    } catch {
+      /* storage full or blocked: cache is optional */
+    }
+  }
+
   async function initGitHubActivity() {
     for (const root of document.querySelectorAll<HTMLElement>('[data-github-activity]')) {
       if (root.dataset.githubReady === 'true') continue;
@@ -256,6 +280,12 @@ const { username, weeks = 18 } = Astro.props;
       if (!username) continue;
 
       renderEmptyCells(root, weeks);
+
+      const cached = readCache(username);
+      if (cached) {
+        renderActivity(root, cached);
+        continue;
+      }
 
       try {
         const response = await fetch(
@@ -268,6 +298,7 @@ const { username, weeks = 18 } = Astro.props;
         if (!response.ok) throw new Error('GitHub activity request failed.');
 
         const events = (await response.json()) as GitHubEvent[];
+        writeCache(username, events);
         renderActivity(root, events);
       } catch {
         root.querySelector<HTMLElement>('[data-github-latest]')!.innerHTML =

@@ -4,7 +4,7 @@ import BlogArticle from '../layouts/BlogArticle.astro';
 const title = 'about me';
 const description = 'Profile and contact page for Novian Nadari, the person behind Novskidev.';
 const date = new Date('2026-05-01T00:00:00+08:00');
-const portraitSrc = '/images/novian.jpeg';
+const portraitSrc = '/images/about-portrait.webp';
 ---
 
 <BlogArticle
@@ -35,7 +35,13 @@ const portraitSrc = '/images/novian.jpeg';
 
     <aside class="about-photo" aria-label="Personal photo">
       <figure>
-        <img src={portraitSrc} alt="Novian Nadari portrait" loading="eager" />
+        <img
+          src={portraitSrc}
+          alt="Novian Nadari portrait"
+          width="640"
+          height="800"
+          loading="eager"
+        />
       </figure>
     </aside>
   </section>
@@ -82,7 +88,7 @@ const portraitSrc = '/images/novian.jpeg';
     background: var(--paper-control);
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 720px) {
     .about-layout {
       grid-template-columns: 1fr;
     }

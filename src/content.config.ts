@@ -251,13 +251,13 @@ const siteConfig = defineCollection({
       layout: z.enum(['grid']),
       quote: z.object({
         text: z.array(z.string()).min(1),
-        image: z.string(),
+        image: z.string().optional(),
       }),
       intro: z.object({
         title: z.string(),
         name: z.string(),
         body: z.array(z.string()).min(1),
-        image: z.string(),
+        image: z.string().optional(),
       }),
       latest: z
         .object({

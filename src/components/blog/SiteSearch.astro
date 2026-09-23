@@ -395,10 +395,15 @@ const shortcutLabel = search.shortcut === 'mod+k' ? 'Ctrl K / Cmd K' : search.sh
   }
 
   @media (max-width: 720px) {
-    .site-search-trigger {
-      width: 36px;
-      height: 36px;
+    .site-search-trigger,
+    .site-search-close {
+      width: 44px;
+      height: 44px;
       border-radius: 7px;
+    }
+
+    .site-search-filters button {
+      min-height: 44px;
     }
 
     .site-search-layer {
@@ -408,6 +413,7 @@ const shortcutLabel = search.shortcut === 'mod+k' ? 'Ctrl K / Cmd K' : search.sh
 
     .site-search-dialog {
       max-height: calc(100vh - 96px);
+      max-height: calc(100dvh - 96px);
     }
 
     .site-search-results {

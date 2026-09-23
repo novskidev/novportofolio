@@ -1,7 +1,4 @@
-@import url('https://api.fontshare.com/v2/css?f[]=pally@400,500,700&display=swap');
-
 @import '@fontsource/maple-mono/400.css';
-@import '@fontsource/maple-mono/500.css';
 @import '@fontsource/maple-mono/600.css';
 @import '@fontsource/maple-mono/700.css';
 
@@ -43,6 +40,7 @@
   --layout-reading-width: 760px;
   --layout-page-gutter: 32px;
   --layout-page-top: 126px;
+  --layout-page-top-mobile: 92px;
   --layout-page-bottom: 72px;
   --page-header-spacing: 54px;
   --page-header-spacing-mobile: 28px;
@@ -51,7 +49,7 @@
   --font-serif-cn: var(--font-ui);
   --font-mono: 'Maple Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-body: var(--font-mono);
-  --font-display: 'Pally', var(--font-mono);
+  --font-display: var(--font-ui);
   --font-note: var(--font-mono);
   --font-article: var(--font-ui);
   --font-heading: var(--font-ui);
@@ -202,12 +200,8 @@ hr {
 }
 
 @media (max-width: 720px) {
-  body {
-    font-size: 18px;
-  }
-
   main {
-    padding: 92px 18px 42px;
+    padding: var(--layout-page-top-mobile) 18px 42px;
   }
 }
 
@@ -239,6 +233,7 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--paper-page-bg);
   color: var(--paper-ink);
   font-family: var(--font-body);
@@ -389,12 +384,107 @@ h6 {
   from {
     opacity: 0;
     transform: translateY(12px);
+    filter: blur(5px);
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
+}
+
+/* Entrance: replaces the old JS stagger. */
+.profile-card,
+.intro-card,
+.github-activity-card,
+.nav-card,
+.doing-card,
+.archive-header-shared,
+.article-card {
+  animation: card-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.profile-card {
+  animation-delay: 40ms;
+}
+
+.nav-card {
+  animation-delay: 85ms;
+}
+
+.github-activity-card {
+  animation-delay: 130ms;
+}
+
+.doing-card {
+  animation-delay: 175ms;
+}
+
+/* Scroll reveal: hidden only while the observer is running (see utils/reveal.ts). */
+[data-reveal='on'] .post-item,
+[data-reveal='on'] .project-card,
+[data-reveal='on'] .category-card,
+[data-reveal='on'] .series-card,
+[data-reveal='on'] .vibe-item,
+[data-reveal='on'] .tag-cloud a,
+[data-reveal='on'] .blog-tag-cloud a,
+[data-reveal='on'] .related-posts {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(5px);
+  transition:
+    opacity 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal='on'] [data-revealed='true'] {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* Hover/press feedback: replaces the old JS pointer handlers. */
+.nav-link,
+.mobile-menu-link,
+.tag-cloud a,
+.blog-tag-cloud a,
+.related-posts a,
+.post-group,
+.post-tag,
+.group-link,
+.site-search-trigger,
+.brand-mark,
+[data-theme-toggle],
+[data-palette-toggle] {
+  transition: transform 160ms ease-out;
+}
+
+.nav-link:hover,
+.mobile-menu-link:hover,
+.tag-cloud a:hover,
+.blog-tag-cloud a:hover,
+.related-posts a:hover,
+.post-group:hover,
+.post-tag:hover,
+.group-link:hover,
+.site-search-trigger:hover {
+  transform: scale(1.018) translateY(-1px);
+}
+
+.nav-link:active,
+.mobile-menu-link:active,
+.tag-cloud a:active,
+.blog-tag-cloud a:active,
+.related-posts a:active,
+.post-group:active,
+.post-tag:active,
+.group-link:active,
+.site-search-trigger:active,
+[data-theme-toggle]:active,
+[data-palette-toggle]:active {
+  transform: scale(0.94);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -424,7 +514,7 @@ h6 {
   }
 
   .archive-header-shared .archive-title {
-    font-size: 2.08rem;
-    line-height: 1.1;
+    font-size: 1.72rem;
+    line-height: 1.12;
   }
 }

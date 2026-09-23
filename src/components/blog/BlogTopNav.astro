@@ -416,6 +416,7 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
   }
 
   .brand-mark {
+    position: relative;
     width: 11px;
     height: 11px;
     padding: 0;
@@ -427,6 +428,13 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
     transition:
       box-shadow 180ms ease,
       transform 180ms ease;
+  }
+
+  /* 11px dot keeps its look; invisible 44px hit area for touch. */
+  .brand-mark::after {
+    position: absolute;
+    inset: -16px;
+    content: '';
   }
 
   .brand-mark:hover,
@@ -515,8 +523,8 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
       gap: 10px;
       top: 10px;
       width: min(calc(100% - 20px), 520px);
-      min-height: 54px;
-      padding: 8px 10px 8px 14px;
+      min-height: 58px;
+      padding: 7px 10px 7px 14px;
       border-radius: 8px;
     }
 
@@ -555,8 +563,8 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
     .nav-actions a,
     .nav-actions button,
     .mobile-menu-toggle {
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       border-radius: 7px;
     }
 
@@ -621,7 +629,7 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
     .mobile-menu-link {
       display: flex;
       align-items: center;
-      min-height: 38px;
+      min-height: 44px;
       padding: 8px 10px;
       border-radius: 7px;
       color: var(--paper-ink-soft);
@@ -663,7 +671,7 @@ const shouldShowTocAction = showTocIcon && tocItems.length > 0;
       grid-template-columns: 22px minmax(0, 1fr);
       gap: 8px;
       align-items: center;
-      min-height: 36px;
+      min-height: 44px;
       padding: 8px 10px;
       border-radius: 7px;
       color: var(--paper-ink-soft);

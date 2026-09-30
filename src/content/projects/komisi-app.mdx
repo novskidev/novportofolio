@@ -1,0 +1,79 @@
+---
+title: 'komisi.app'
+description: 'One page for a freelancer’s work and the orders it brings: portfolio, order form, and a single progress-and-delivery link per client.'
+date: '2026-09-30T08:00:00.000Z'
+draft: false
+heroImage: '../../assets/projects/komisi-app.webp'
+showHeroImage: true
+tags: [sveltekit, redis, postgresql]
+categories: [Web Development]
+series: []
+comments: false
+sidebar:
+  enable: false
+  toc: false
+  relatedPosts: false
+---
+
+# komisi.app
+
+[komisi.app](https://komisi.app) gives freelancers one page for their work and the orders it brings. The deal stays in the DMs, and komisi.app keeps the path around it tidy.
+
+Freelancers show their work on their komisi.app page and put the link in their bio. Clients order through the form on that page, then send the order summary to the freelancer by DM. Once both sides agree, the freelancer shares progress and the finished files through one link for that client. The app connects freelancers with clients and keeps each project's details in one place.
+
+## My Role: Fullstack Developer
+
+I built komisi.app end to end, from the database to the server it runs on:
+
+- **System design:** designed the architecture and decided where each piece of data lives: PostgreSQL for durable records, Redis for fast, short-lived state.
+- **Frontend:** built the public freelancer pages, the order form, the client progress page, and the freelancer dashboard in SvelteKit and Tailwind CSS.
+- **Backend:** wrote the server logic with SvelteKit `load` functions and form actions: order submission, project status updates, file delivery, and authentication.
+- **Database:** modeled the schema (freelancers, portfolio items, orders, and progress updates and deliverables) and managed it with Drizzle ORM and its migrations.
+- **Infrastructure:** provisioned the VPS, containerized the app with Docker, and **installed and configured Redis myself** for sessions, caching, and rate limiting.
+- **Deployment and operations:** handled production environment configuration, the domain setup, and releases.
+
+## System Design
+
+```text
+Client / Freelancer (browser, mostly mobile via bio links)
+            │
+            ▼
+   SvelteKit app (SSR + form actions)  ── Docker on VPS
+        │                    │
+        ▼                    ▼
+      Redis              PostgreSQL
+  sessions · cache ·     (Drizzle ORM)
+  rate limits            users, orders,
+                         progress, files
+```
+
+**Redis** runs next to the app on the same VPS and handles three jobs:
+
+- **Sessions:** every authenticated request checks the session. Redis serves that lookup from memory, so PostgreSQL doesn't take a query on every page load.
+- **Caching:** public freelancer pages are read far more often than they change. Page data is cached in Redis and invalidated when the freelancer updates their page, so the database handles writes and cache misses rather than every visit.
+- **Rate limiting:** the order form is public and the login is a brute-force target. Per-IP counters in Redis throttle abusive traffic before it reaches the database.
+
+**PostgreSQL** is the source of truth. The data is relational (a freelancer has many orders, and an order has many progress updates and deliverables), so a relational database with typed queries through Drizzle fits naturally.
+
+**Self-hosting on a VPS with Docker** kept costs predictable, gave me full control over the runtime, and let me place Redis and the database right beside the app rather than paying for separate managed services.
+
+## Why This Stack
+
+- **SvelteKit:** one framework covers the whole product. Server-side rendering, data loading, and form actions live in the same codebase, so there's no separate backend to build and deploy.
+- **Performance:** Svelte compiles to small, fast JavaScript. Most visitors arrive from a bio link on a phone, so a light page load matters.
+- **SEO through SSR:** freelancer pages are rendered on the server, so they can be indexed and shared with proper previews.
+- **Developer experience:** less boilerplate than a React setup, so I could ship features quickly as the only developer.
+- **Drizzle ORM:** type-safe, SQL-like queries and plain migrations, without the weight of a heavier ORM.
+- **Redis:** the simplest fit for short-lived, high-frequency data (sessions, cache entries, and rate-limit counters) that would otherwise put load on PostgreSQL.
+- **Tailwind CSS:** fast and consistent styling across the public pages and the dashboard.
+
+## Tech Stack
+
+- **SvelteKit:** fullstack framework (SSR, load functions, form actions).
+- **PostgreSQL:** primary database.
+- **Drizzle ORM:** schema, migrations, and type-safe queries.
+- **Redis:** sessions, caching, and rate limiting.
+- **Tailwind CSS:** styling.
+- **Docker on a VPS:** self-hosted deployment.
+
+The project is live at [komisi.app](https://komisi.app).

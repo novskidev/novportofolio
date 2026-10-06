@@ -1,0 +1,65 @@
+---
+title: 'Why I Finally Switched to Jcode'
+description: 'After hopping between coding agents, I landed on Jcode: ~10.4 MB per extra session, a near-instant startup, a harness that actually keeps the model honest, and MIT-licensed source I can read.'
+date: '2026-10-06T07:14:47.000Z'
+draft: false
+showHeroImage: false
+tags: [jcode, ai-agents, tooling, rust]
+categories: [Notes]
+series: []
+comments: true
+sidebar:
+  enable: true
+  toc: true
+  relatedPosts: true
+---
+
+# Why I Finally Switched to Jcode
+
+I have bounced between coding agents for a while. Each one was good at something and annoying at something else, and none of them made me want to stop looking. [Jcode](https://jcode.sh/) finally did. It is an open source terminal coding agent written in Rust, and after living in it for a bit, the search is over for me. Here is why.
+
+## It is light enough to stop thinking about
+
+The thing that kept biting me with other tools was resource cost. Spawn a few agents and RAM balloons, so you run a handful and queue everything else behind them. Jcode flips that: each additional session adds only about 10.4 MB, so ten sessions cost roughly 100 MB, less than half of a single Claude Code agent.
+
+Measured on the same machine, extra memory per additional session:
+
+| Tool        | RAM per extra session |
+| ----------- | --------------------- |
+| Jcode       | ~10.4 MB (baseline)   |
+| Codex CLI   | ~21.6 MB (2.2x)       |
+| Pi          | ~76.5 MB (7.7x)       |
+| Claude Code | ~212.7 MB (21.5x)     |
+| OpenCode    | ~318.4 MB (32.2x)     |
+
+Spawning another Jcode agent is a non-decision. That is the whole point: running dozens of sessions in parallel is actually possible, and a dozen agents working at once is a dozen times the output of one.
+
+## It is interactive before other tools have rendered
+
+Startup is not close either. Time to first input, meaning how long until you can actually type, is about 48.7 ms on Jcode. The next closest tool I tried is in the hundreds of milliseconds, and Claude Code sits around 3.5 seconds. Time to first frame is about 14 ms. On my machine the difference is felt every single session.
+
+## The harness matters as much as the model
+
+This is the part that surprised me. The same model behaves very differently depending on what surrounds it, and Jcode leans into that hard:
+
+- **Confidence stepping.** The todo tool asks the agent to rate its confidence before and after each task. When confidence spikes suspiciously at the end, the harness forces it to go back and verify instead of declaring victory.
+- **Auto-poke persistence.** Most agent failures are early exits, not wrong answers. When a turn ends with incomplete todos, Jcode pokes the model back to work automatically and retries transient errors.
+- **Hill-climbable goals.** Every goal gets a rating for how measurable its progress is, and the harness pushes back when a task has no objective to iterate against.
+- **Warm prompt cache.** The context is strictly append-only, so the cache almost never breaks. Lower cost, snappier turns, especially on long sessions.
+- **Built-in memory.** Each turn is embedded as a vector and relevant memories surface automatically, without the agent burning tokens on manual memory calls.
+
+None of these are flashy features. They are the quiet plumbing that makes a session feel reliable instead of lucky.
+
+## Open source, and mine to reshape
+
+Jcode is MIT licensed and open research: the source, the benchmarks, even the failures are published. A tool that reads my code, edits my files, and runs commands on my machine should be one I can read and audit. There is also a self dev mode where the agent modifies its own source, rebuilds, and reloads its own binary to keep working. That level of openness is rare, and it is the reason I trust it with real work.
+
+## Bottom line
+
+I did not switch to Jcode because of one killer feature. I switched because it is light enough to spawn without thinking, fast enough to disappear, honest enough to catch its own mistakes, and open enough to trust. That combination ended the search for me.
+
+If you want to try it:
+
+```bash
+curl -fsSL https://jcode.sh/install | bash
+```

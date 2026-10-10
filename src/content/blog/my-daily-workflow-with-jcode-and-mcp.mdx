@@ -1,0 +1,82 @@
+---
+title: 'My Daily Workflow: How I Use Jcode and MCP in Real Projects'
+description: 'Moving beyond code autocomplete: how combining Jcode with Model Context Protocol (MCP) transformed my daily terminal development workflow.'
+date: '2026-10-10T04:22:00.000Z'
+draft: false
+showHeroImage: false
+tags: [jcode, mcp, ai-agents, workflow, developer-tools]
+categories: ['AI Tools', 'Workflow']
+series: []
+comments: true
+sidebar:
+  enable: true
+  toc: true
+  relatedPosts: true
+---
+
+# My Daily Workflow: How I Use Jcode and MCP in Real Projects
+
+In my previous post, I wrote about switching to [Jcode](https://jcode.sh/) because of its negligible memory footprint and fast startup. Once the CLI agent became a permanent fixture in my terminal, the next evolution was connecting it to the rest of my development environment.
+
+That is where MCP (Model Context Protocol) enters the picture. Instead of copying compiler logs, schema definitions, and git diffs back and forth into chat windows, MCP turns the terminal agent into an active collaborator with real access to project tools.
+
+Here is an honest look at my day-to-day setup and how I actually use it.
+
+## The Mental Shift: Autocomplete vs Agentic Assistance
+
+Traditional AI plugins operate inside your editor, guessing the next line or completing functions inside your active file. While helpful, they remain blind to project state outside the editor window.
+
+With Jcode and MCP, the workflow shifts to goal-oriented tasks:
+
+- Inspecting git history and dirty working trees
+- Querying local databases to verify migration consistency
+- Searching documentation and issue trackers without switching browser tabs
+- Running test suites and fixing failures autonomously
+
+## My Core MCP Tool Stack
+
+I keep my MCP setup minimal to avoid polluting the model context window. Here are the core servers enabled in my workspace:
+
+### 1. Git and Workspace Inspection
+
+While Jcode has built-in file operations, having git-aware tooling lets the agent inspect commit graphs, diffs against main, and stage targeted hunks before creating clean commits.
+
+### 2. Database and Schema Inspection
+
+For backend work, having read-only access to local development schemas prevents hallucinations when writing queries or updating ORM definitions. The agent can verify column types directly against the running dev database.
+
+### 3. Documentation Search
+
+Instead of pasting API documentation, a local documentation server provides live semantic retrieval for libraries and internal packages, keeping answers grounded in current versions.
+
+## 3 Workflows I Rely on Every Day
+
+### Settle Multi-File Refactors Faster
+
+Renaming an interface or restructuring a shared module often breaks dozens of call sites across a codebase. Instead of manually walking through compiler errors:
+
+1. I prompt Jcode with the goal and migration plan.
+2. The agent edits dependent files, runs the test command, and reads compiler feedback directly.
+3. It iterates until all type errors and lint rules pass cleanly.
+
+### Deep Bug Root-Cause Analysis
+
+When an integration test fails unexpectedly, I hand Jcode the failure trace. With MCP access to local logs and recent git commits, it checks what changed, inspects the affected functions, and reproduces the edge case with an isolated unit test.
+
+### Routine PR Preparation
+
+Before opening a pull request, I ask Jcode to audit staged changes. It reviews the diff against project standards, verifies that documentation matches code changes, and suggests clear commit messages following conventional commit formatting.
+
+## Ground Rules and Guardrails
+
+Giving an agent terminal capabilities requires sane guardrails:
+
+- **Read-Only by Default for External Services:** Database and cloud integrations should be strictly read-only in development unless explicitly authorized.
+- **Review Every Diff:** The agent writes the code, but you own the commit. Running quick visual checks on generated diffs prevents subtle logic slips.
+- **Context Hygiene:** Keep individual tasks scoped. Closing finished agent sessions and starting fresh for unrelated tasks keeps token usage efficient and latency snappy.
+
+## Conclusion
+
+Pairing a lightweight CLI agent like Jcode with MCP bridges the gap between passive code suggestion and active development assistance. It eliminates repetitive friction in my day without stealing control of the architecture.
+
+If you already use a terminal-first workflow, setting up MCP servers for your daily tools is well worth the effort.

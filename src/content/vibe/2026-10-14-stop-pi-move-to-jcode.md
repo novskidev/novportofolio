@@ -12,4 +12,4 @@ align: left
 size: md
 ---
 
-officially stop pakai pi coding agent bro. sekarang full pindah ke jcode, totally. feels faster, feels home.
+officially stopped using the pi coding agent. now fully moved to jcode, totally. feels faster, feels like home.

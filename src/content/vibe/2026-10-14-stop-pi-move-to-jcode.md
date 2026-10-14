@@ -8,7 +8,7 @@ mood: 'excited'
 location: ''
 images: []
 tags: [jcode, ai-agent]
-align: left
+align: center
 size: md
 ---
 

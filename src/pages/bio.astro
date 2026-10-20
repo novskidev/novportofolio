@@ -1,60 +1,20 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import BlogTopNav from '../components/blog/BlogTopNav.astro';
-import Footer from '../components/Footer.astro';
 import { getThemePalette, getSiteConfig } from '../data/site';
 
-const { profile, site } = await getSiteConfig();
+const { profile } = await getSiteConfig();
 const palette = await getThemePalette();
 
 const pageTitle = `${profile.name} | Bio`;
-const pageDescription = `${profile.name} is a ${profile.role} based in ${profile.location}. ${profile.meta}.`;
+const pageDescription = `${profile.name} — ${profile.role}. Links, projects, and contact.`;
 
-const expertise = [
-  {
-    title: 'Backend & Architecture',
-    description: 'Designing systems and APIs that can handle scale.',
-  },
-  {
-    title: 'Frontend Systems',
-    description: 'Building fast, intuitive user interfaces.',
-  },
-  {
-    title: 'AI & Automation',
-    description: 'Integrating LLMs and automating workflows.',
-  },
-  {
-    title: 'Cloud & DevOps',
-    description: 'Deploying and managing infrastructure.',
-  },
-  {
-    title: 'Education & Mentoring',
-    description: 'Teaching, sharing knowledge, and inspiring young minds.',
-  },
-];
-
-const building = [
-  'Building a personal portfolio site.',
-  'Collecting project notes and references.',
-  'Improving my static-site publishing workflow.',
-];
-
-const learning = [
-  'Learning more about DevOps and infrastructure.',
-  'Studying distributed systems and edge computing.',
-  'Looking into how design systems speed up engineering.',
-];
-
-const exploring = [
-  'Figuring out my next remote work spot. Good coffee and fast internet are the only requirements.',
-  'Reading about engineering philosophy and thinking long term.',
-  'Playing around with minimal UI for complex data tools.',
-];
-
-const socialLinks = [
-  { label: 'GitHub', href: profile.github },
-  { label: 'Website', href: profile.website },
-  { label: 'Email', href: `mailto:${profile.email}` },
+const links = [
+  { label: 'Website', href: profile.website, desc: profile.website.replace('https://', '') },
+  { label: 'GitHub', href: profile.github, desc: profile.github.replace('https://', '') },
+  { label: 'Blog', href: '/blog', desc: 'Essays, notes, and field reports' },
+  { label: 'Projects', href: '/projects', desc: 'Selected work and project notes' },
+  { label: 'About', href: '/about', desc: 'Profile and background' },
+  { label: 'Email', href: `mailto:${profile.email}`, desc: profile.email },
 ];
 ---
 
@@ -64,57 +24,25 @@ const socialLinks = [
     <BaseHead title={pageTitle} description={pageDescription} />
   </head>
   <body class="bio-page">
-    <BlogTopNav />
-    <div class="bio-bg" aria-hidden="true"></div>
-
     <main class="bio-main" data-pagefind-body>
-      <div class="bio-container">
-        <!-- Hero -->
-        <section class="bio-hero">
-          <div class="bio-hero-text">
-            <h1>{profile.name}</h1>
-            <p class="bio-role">{profile.role}</p>
-            <p class="bio-tagline">
-              I build scalable systems, work with global teams, and design products that solve real
-              problems.
-            </p>
-          </div>
+      <header class="bio-header">
+        <img src={profile.avatar} alt={profile.name} width="96" height="96" loading="eager" />
+        <h1>{profile.name}</h1>
+        <p class="bio-role">{profile.role}</p>
+        <p class="bio-location">{profile.location}</p>
+      </header>
 
-          <div class="bio-hero-actions">
-            <a class="bio-btn bio-btn-primary" href="/blog">
-              Read Writing
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-              </svg>
-            </a>
-            <a class="bio-btn bio-btn-secondary" href={`mailto:${profile.email}`}> Contact </a>
-          </div>
-        </section>
-
-        <!-- Links / Writing -->
-        <section class="bio-section" id="writing">
-          <div class="bio-section-label">Writing</div>
-          <p class="bio-section-intro">
-            I write about AI, automation, building SaaS, remote work, and engineering philosophy.
-          </p>
-          <div class="bio-link-list">
+      <nav class="bio-links" aria-label="Bio links">
+        {
+          links.map((link) => (
             <a
-              class="bio-link-row"
-              href="https://dev.to/novskidev"
-              target="_blank"
-              rel="noreferrer"
+              class="bio-link"
+              href={link.href}
+              target={link.href.startsWith('http') ? '_blank' : undefined}
+              rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
             >
-              <span>Dev.to</span>
+              <span class="bio-link-label">{link.label}</span>
+              <span class="bio-link-desc">{link.desc}</span>
               <svg
                 width="16"
                 height="16"
@@ -126,86 +54,13 @@ const socialLinks = [
                 stroke-linejoin="round"
                 aria-hidden="true"
               >
-                <path d="M7 17L17 7M17 7H8M17 7v9"></path>
+                <path d="M7 17L17 7M17 7H8M17 7v9" />
               </svg>
             </a>
-            <a class="bio-link-row" href="/blog">
-              <span>Blog</span>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-              </svg>
-            </a>
-          </div>
-        </section>
-
-        <!-- Expertise -->
-        <section class="bio-section">
-          <div class="bio-section-label">Expertise</div>
-          <div class="bio-expertise-grid">
-            {
-              expertise.map((item) => (
-                <div class="bio-expertise-item">
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              ))
-            }
-          </div>
-        </section>
-
-        <!-- Now -->
-        <section class="bio-section">
-          <div class="bio-section-label">What I'm focused on right now.</div>
-          <div class="bio-now-grid">
-            <div class="bio-now-col">
-              <h3>Building</h3>
-              <ul>
-                {building.map((item) => <li>{item}</li>)}
-              </ul>
-            </div>
-            <div class="bio-now-col">
-              <h3>Learning</h3>
-              <ul>
-                {learning.map((item) => <li>{item}</li>)}
-              </ul>
-            </div>
-            <div class="bio-now-col">
-              <h3>Exploring</h3>
-              <ul>
-                {exploring.map((item) => <li>{item}</li>)}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- Contact -->
-        <section class="bio-section bio-contact">
-          <div class="bio-section-label">Contact</div>
-          <p class="bio-contact-name">{profile.name}</p>
-          <div class="bio-contact-links">
-            {
-              socialLinks.map((link) => (
-                <a href={link.href} target="_blank" rel="noreferrer">
-                  {link.label}
-                </a>
-              ))
-            }
-          </div>
-        </section>
-      </div>
+          ))
+        }
+      </nav>
     </main>
-
-    <Footer />
   </body>
 </html>
 
@@ -214,170 +69,100 @@ const socialLinks = [
     min-height: 100vh;
     min-height: 100dvh;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background: var(--paper-bg);
     color: var(--paper-ink);
-  }
-
-  .bio-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image: linear-gradient(var(--paper-rule) 1px, transparent 1px);
-    background-size: 100% 34px;
-    opacity: 0.15;
+    padding: 80px 20px;
   }
 
   .bio-main {
-    position: relative;
-    z-index: 1;
-    flex: 1;
-    width: min(100%, 768px);
-    margin: 0 auto;
-    padding: calc(var(--layout-page-top, 120px) + 24px) 24px 96px;
+    width: min(100%, 480px);
   }
 
-  .bio-container {
+  .bio-header {
     display: flex;
     flex-direction: column;
-    gap: clamp(48px, 8vw, 80px);
+    align-items: center;
+    text-align: center;
+    margin-bottom: 40px;
   }
 
-  /* Hero */
-  .bio-hero {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    padding-top: 12px;
+  .bio-header img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 2px solid var(--paper-line);
   }
 
-  .bio-hero-text {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .bio-hero h1 {
+  .bio-header h1 {
     margin: 0;
     color: var(--paper-ink);
     font-family: var(--font-heading);
-    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-size: 1.5rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
 
   .bio-role {
-    margin: 0;
+    margin: 6px 0 0;
     color: var(--paper-ink-soft);
-    font-size: 1.05rem;
-    font-weight: 500;
-    line-height: 1.4;
-  }
-
-  .bio-tagline {
-    margin: 4px 0 0;
-    max-width: 42ch;
-    color: var(--paper-ink);
-    font-size: 1.1rem;
-    font-weight: 300;
-    line-height: 1.7;
-  }
-
-  .bio-hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 8px;
-  }
-
-  .bio-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 22px;
-    border-radius: 999px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 180ms ease;
-  }
-
-  .bio-btn-primary {
-    background: var(--paper-ink);
-    color: var(--paper-bg);
-  }
-
-  .bio-btn-primary:hover {
-    opacity: 0.88;
-    transform: translateY(-1px);
-  }
-
-  .bio-btn-secondary {
-    border: 1px solid var(--paper-line);
-    color: var(--paper-ink);
-    background: transparent;
-  }
-
-  .bio-btn-secondary:hover {
-    border-color: var(--paper-ink);
-    background: var(--paper-control);
-  }
-
-  /* Sections */
-  .bio-section {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding-top: 32px;
-    border-top: 1px solid var(--paper-line);
-  }
-
-  .bio-section-label {
-    color: var(--paper-ink-faint);
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .bio-section-intro {
-    margin: 0;
-    max-width: 52ch;
-    color: var(--paper-ink-soft);
-    font-size: 1rem;
-    font-weight: 300;
-    line-height: 1.7;
-  }
-
-  /* Link list */
-  .bio-link-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .bio-link-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--paper-line);
-    color: var(--paper-ink);
     font-size: 0.95rem;
     font-weight: 500;
+  }
+
+  .bio-location {
+    margin: 2px 0 0;
+    color: var(--paper-ink-faint);
+    font-size: 0.85rem;
+  }
+
+  .bio-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bio-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border: 1px solid var(--paper-line);
+    border-radius: 12px;
+    background: var(--paper-surface);
+    color: var(--paper-ink);
     text-decoration: none;
     transition:
       border-color 180ms ease,
-      color 180ms ease;
+      background 180ms ease,
+      transform 180ms ease;
   }
 
-  .bio-link-row:hover {
-    border-bottom-color: var(--paper-ink);
-    color: var(--paper-accent);
+  .bio-link:hover {
+    border-color: var(--paper-ink);
+    background: var(--paper-control);
+    transform: translateY(-1px);
   }
 
-  .bio-link-row svg {
+  .bio-link-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+
+  .bio-link-desc {
+    flex: 1;
+    color: var(--paper-ink-faint);
+    font-size: 0.82rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bio-link svg {
     flex: 0 0 auto;
     color: var(--paper-ink-faint);
     transition:
@@ -385,117 +170,8 @@ const socialLinks = [
       transform 180ms ease;
   }
 
-  .bio-link-row:hover svg {
+  .bio-link:hover svg {
     color: var(--paper-accent);
-    transform: translateX(3px);
-  }
-
-  /* Expertise grid */
-  .bio-expertise-grid {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 24px 48px;
-  }
-
-  .bio-expertise-item h3 {
-    margin: 0 0 6px;
-    color: var(--paper-ink);
-    font-family: var(--font-heading);
-    font-size: 0.95rem;
-    font-weight: 600;
-  }
-
-  .bio-expertise-item p {
-    margin: 0;
-    color: var(--paper-ink-soft);
-    font-size: 0.9rem;
-    font-weight: 300;
-    line-height: 1.6;
-  }
-
-  /* Now grid */
-  .bio-now-grid {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 28px;
-  }
-
-  .bio-now-col h3 {
-    margin: 0 0 12px;
-    color: var(--paper-ink);
-    font-family: var(--font-heading);
-    font-size: 0.85rem;
-    font-weight: 600;
-  }
-
-  .bio-now-col ul {
-    margin: 0;
-    padding-left: 1.1em;
-    list-style: disc;
-  }
-
-  .bio-now-col li {
-    margin-bottom: 8px;
-    color: var(--paper-ink-soft);
-    font-size: 0.9rem;
-    font-weight: 300;
-    line-height: 1.7;
-  }
-
-  .bio-now-col li:last-child {
-    margin-bottom: 0;
-  }
-
-  /* Contact */
-  .bio-contact-name {
-    margin: 0;
-    color: var(--paper-ink);
-    font-family: var(--font-heading);
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-
-  .bio-contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .bio-contact-links a {
-    color: var(--paper-ink-soft);
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 180ms ease;
-  }
-
-  .bio-contact-links a:hover {
-    color: var(--paper-accent);
-  }
-
-  /* Responsive */
-  @media (min-width: 640px) {
-    .bio-expertise-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .bio-now-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 640px) {
-    .bio-main {
-      padding-left: 16px;
-      padding-right: 16px;
-    }
-
-    .bio-hero h1 {
-      font-size: 1.8rem;
-    }
-
-    .bio-tagline {
-      font-size: 1rem;
-    }
+    transform: translateX(2px) translateY(-2px);
   }
 </style>

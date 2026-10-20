@@ -81,10 +81,6 @@ label = "About"
 href = "/about"
 
 [[config.topNav.links]]
-label = "Bio"
-href = "/bio"
-
-[[config.topNav.links]]
 label = "Blog"
 href = "/blog"
 

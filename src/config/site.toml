@@ -73,6 +73,7 @@ location = "Remote"
 email = "novskidev@gmail.com"
 website = "https://novski.dev/"
 github = "https://github.com/novskidev"
+threads = "https://www.threads.com/@novski.dev"
 meta = "Personal portfolio"
 avatar = "/images/avatar.webp"
 

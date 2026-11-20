@@ -219,6 +219,7 @@ const siteConfig = defineCollection({
       email: z.email(),
       website: z.url(),
       github: optionalUrlSchema,
+      threads: optionalUrlSchema.optional().default(''),
       meta: z.string(),
       avatar: z.string(),
     }),

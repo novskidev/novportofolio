@@ -58,7 +58,7 @@ const jsonLd = [
     url: profile.website,
     image: new URL(profile.avatar, Astro.url).toString(),
     email: profile.email,
-    sameAs: [profile.github, site.repository].filter(Boolean),
+    sameAs: [profile.github, profile.threads, site.repository].filter(Boolean),
   },
 ];
 

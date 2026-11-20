@@ -48,8 +48,10 @@ const socials = [
               target={link.href.startsWith('http') ? '_blank' : undefined}
               rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
             >
-              <span class="bio-link-label">{link.label}</span>
-              <span class="bio-link-desc">{link.desc}</span>
+              <span class="bio-link-text">
+                <span class="bio-link-label">{link.label}</span>
+                <span class="bio-link-desc">{link.desc}</span>
+              </span>
               <svg
                 width="16"
                 height="16"
@@ -108,7 +110,8 @@ const socials = [
     justify-content: center;
     background: var(--paper-bg);
     color: var(--paper-ink);
-    padding: 40px 20px;
+    padding: max(40px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+      max(40px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
   }
 
   .bio-main {
@@ -166,20 +169,36 @@ const socials = [
     gap: 12px;
     padding: 12px 18px;
     border: 1px solid var(--paper-line);
+    min-height: 52px;
     border-radius: 12px;
     background: var(--paper-surface);
     color: var(--paper-ink);
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
     transition:
       border-color 180ms ease,
       background 180ms ease,
       transform 180ms ease;
   }
 
-  .bio-link:hover {
-    border-color: var(--paper-ink);
+  .bio-link:focus-visible,
+  .bio-social:focus-visible {
+    outline: 2px solid var(--paper-accent);
+    outline-offset: 2px;
+  }
+
+  .bio-link:active {
     background: var(--paper-control);
-    transform: translateY(-1px);
+    transform: scale(0.99);
+  }
+
+  .bio-link-text {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: baseline;
+    gap: 12px;
   }
 
   .bio-link-label {
@@ -205,9 +224,22 @@ const socials = [
       transform 180ms ease;
   }
 
-  .bio-link:hover svg {
-    color: var(--paper-accent);
-    transform: translateX(2px) translateY(-2px);
+  @media (hover: hover) {
+    .bio-link:hover {
+      border-color: var(--paper-ink);
+      background: var(--paper-control);
+      transform: translateY(-1px);
+    }
+
+    .bio-link:hover svg {
+      color: var(--paper-accent);
+      transform: translateX(2px) translateY(-2px);
+    }
+
+    .bio-social:hover {
+      color: var(--paper-accent);
+      background: var(--paper-control);
+    }
   }
 
   .bio-socials {
@@ -230,8 +262,60 @@ const socials = [
       background 180ms ease;
   }
 
-  .bio-social:hover {
-    color: var(--paper-accent);
-    background: var(--paper-control);
+  @media (prefers-reduced-motion: reduce) {
+    .bio-link,
+    .bio-link svg,
+    .bio-social {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .bio-page {
+      align-items: flex-start;
+      padding-top: max(48px, env(safe-area-inset-top));
+      padding-right: max(16px, env(safe-area-inset-right));
+      padding-left: max(16px, env(safe-area-inset-left));
+    }
+
+    .bio-header img {
+      width: 88px;
+      height: 88px;
+    }
+
+    .bio-header h1 {
+      font-size: 1.375rem;
+    }
+
+    .bio-links {
+      gap: 10px;
+    }
+
+    .bio-link {
+      min-height: 60px;
+      padding: 12px 16px;
+    }
+
+    .bio-link-text {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .bio-link-desc {
+      width: 100%;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .bio-socials {
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .bio-social {
+      width: 48px;
+      height: 48px;
+    }
   }
 </style>

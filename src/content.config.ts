@@ -319,4 +319,23 @@ const vibe = defineCollection({
     }),
 });
 
-export const collections = { blog, projects, vibe, siteConfig };
+const tools = defineCollection({
+  loader: glob({ base: './src/content/tools', pattern: '**/*.{md,mdx}' }),
+  schema: (context) =>
+    articleSchema(context).extend({
+      // Date of the latest review pass. `date` stays the first-published date.
+      updatedDate: z.coerce.date().optional(),
+      category: z.string(),
+      status: z.enum(['daily-driver', 'using', 'tried', 'retired']).default('using'),
+      rating: z.number().min(0).max(5).multipleOf(0.5),
+      pricing: z.enum(['free', 'freemium', 'paid', 'open-source']),
+      website: z.url(),
+      verdict: z.string(),
+      bestFor: z.string().optional(),
+      pros: z.array(z.string()).optional().default([]),
+      cons: z.array(z.string()).optional().default([]),
+      alternatives: z.array(z.string()).optional().default([]),
+    }),
+});
+
+export const collections = { blog, projects, vibe, tools, siteConfig };

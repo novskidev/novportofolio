@@ -92,6 +92,10 @@ href = "/projects"
 label = "Vibe"
 href = "/vibe"
 
+[[config.topNav.links]]
+label = "Tools"
+href = "/tools"
+
 [config.home]
 layout = "grid"
 
@@ -140,6 +144,12 @@ icon = "sparkle"
 title = "Vibe"
 subtitle = "Short updates and digital fragments"
 href = "/vibe"
+
+[[config.home.navigation]]
+icon = "wrench"
+title = "Tools"
+subtitle = "Curated tools with honest reviews"
+href = "/tools"
 
 [[config.home.connect]]
 label = "GitHub"

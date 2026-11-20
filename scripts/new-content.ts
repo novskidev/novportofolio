@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
-type ContentType = 'blog' | 'project' | 'vibe';
+type ContentType = 'blog' | 'project' | 'vibe' | 'tool';
 type Extension = 'md' | 'mdx';
 
 type ContentTypeConfig = {
@@ -37,6 +37,14 @@ const CONTENT_TYPES = {
     fileName: (slug, now) => `${formatDatePrefix(now)}-${slug}`,
     bodyTemplate: createVibeBody,
     frontmatterTemplate: createVibeFrontmatter,
+  },
+  tool: {
+    collectionName: 'tool',
+    directory: 'src/content/tools',
+    defaultExtension: 'mdx',
+    fileName: (slug) => slug.toLowerCase(),
+    bodyTemplate: createToolBody,
+    frontmatterTemplate: createToolFrontmatter,
   },
 } satisfies Record<ContentType, ContentTypeConfig>;
 
@@ -91,7 +99,7 @@ console.log(
 );
 
 function isSupportedContentType(value: string | undefined): value is ContentType {
-  return value === 'blog' || value === 'project' || value === 'vibe';
+  return value === 'blog' || value === 'project' || value === 'vibe' || value === 'tool';
 }
 
 function normalizeFilename(value: string): string {
@@ -175,6 +183,32 @@ size: md
 ---`;
 }
 
+function createToolFrontmatter(title: string, isoDate: string, draft: boolean): string {
+  return `---
+title: "${escapeYamlString(title)}"
+description: ""
+date: "${isoDate}"
+draft: ${draft}
+showHeroImage: false
+# One of the existing categories keeps the /tools filter tidy.
+category: ""
+# daily-driver | using | tried | retired
+status: using
+# 0 to 5 in steps of 0.5
+rating: 4
+# free | freemium | paid | open-source
+pricing: free
+website: "https://example.com/"
+verdict: ""
+bestFor: ""
+pros: []
+cons: []
+alternatives: []
+# Reuse blog tags so related posts show up under the review.
+tags: []
+---`;
+}
+
 function createBlogBody(title: string): string {
   return `# ${title}
 
@@ -185,6 +219,20 @@ function createProjectBody(title: string): string {
   return `# ${title}
 
 Describe the project, goals, technical decisions, and results here.`;
+}
+
+function createToolBody(): string {
+  return `## Why it is in my toolbox
+
+What problem it solves for you.
+
+## How I use it
+
+- First use case
+
+## Where it falls short
+
+Honest limits and when to pick something else.`;
 }
 
 function createVibeBody(): string {
@@ -202,7 +250,8 @@ Examples:
 bun run post:new my-first-post
 bun run post:new my-first-post --publish
 bun run project:new my-project
-bun run vibe:new today-cloud`);
+bun run vibe:new today-cloud
+bun run tool:new obsidian`);
 }
 
 function printUnsupportedContentType(contentType: string | undefined): void {
@@ -211,5 +260,6 @@ function printUnsupportedContentType(contentType: string | undefined): void {
 Supported types:
 - blog
 - project
-- vibe`);
+- vibe
+- tool`);
 }

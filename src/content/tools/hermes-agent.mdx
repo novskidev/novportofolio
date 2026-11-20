@@ -1,0 +1,40 @@
+---
+title: 'Hermes Agent'
+description: 'Self-hosted AI agent that lives on my VPS and talks to me through Telegram: memory, skills, cronjobs, and server automation.'
+date: '2026-11-20'
+draft: false
+showHeroImage: false
+category: 'Self-hosted agent'
+status: 'daily-driver'
+rating: 4.5
+pricing: 'open-source'
+website: 'https://hermes-agent.nousresearch.com/'
+verdict: 'My always-on personal agent: stable on a small VPS, comfortable from Telegram, and genuinely useful for real ops work.'
+bestFor: 'An always-on assistant on a modest, CPU-only VPS'
+pros:
+  - 'Light enough to run next to MySQL, Apache, Docker, and Ollama on ~11 GB RAM'
+  - 'Telegram gateway makes it usable from anywhere'
+  - 'Memory, skills, and cronjobs feel built in, not bolted on'
+  - 'Plugin ecosystem covers compression, memory, alerts, and Home Assistant'
+cons:
+  - 'Needs a curated plugin stack before it shines for background jobs'
+  - 'Self-hosting means you own the maintenance'
+alternatives: ['OpenClaw']
+tags: ['AI Agent', 'Hermes Agent', 'Self Hosted', 'VPS']
+---
+
+## Why it is in my toolbox
+
+I wanted an agent that could live on my server permanently without making me worry about resources. OpenClaw used ~396 MB of RAM on the same box; Hermes fit my setup and my workflow better.
+
+## How I use it
+
+- Chatting through Telegram while it reads files and runs commands on the server
+- Scheduled jobs: backups, snapshots, uptime checks, with Discord alerts on failure
+- Content drafting and post scheduling
+- Remembering preferences and server details across sessions
+
+## Read more
+
+- [Hermes Agent vs OpenClaw: Why I Finally Chose Hermes](/blog/why-i-prefer-hermes-agent/)
+- [11 Essential Hermes Agent Plugins for a Lean VPS Setup](/blog/essential-hermes-agent-plugins/)

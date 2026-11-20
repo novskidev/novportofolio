@@ -1,0 +1,28 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import ToolSummary from '../../components/tools/ToolSummary.astro';
+import BlogArticle from '../../layouts/BlogArticle.astro';
+
+export async function getStaticPaths() {
+  const tools = await getCollection('tools', ({ data }) => !data.draft);
+
+  return tools.map((tool) => ({
+    params: { slug: tool.id },
+    props: tool,
+  }));
+}
+
+type Props = CollectionEntry<'tools'>;
+
+const tool = Astro.props;
+const { Content, headings } = await render(tool);
+---
+
+<BlogArticle
+  post={tool}
+  headings={headings}
+  sidebar={{ enable: true, toc: true, relatedPosts: true, ...tool.data.sidebar }}
+>
+  <ToolSummary slot="before-content" tool={tool} />
+  <Content />
+</BlogArticle>

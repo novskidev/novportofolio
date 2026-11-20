@@ -1,7 +1,12 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 
-const contentDirs = ['src/content/blog', 'src/content/projects', 'src/content/vibe'];
+const contentDirs = [
+  'src/content/blog',
+  'src/content/projects',
+  'src/content/vibe',
+  'src/content/tools',
+];
 const contentExtensions = new Set(['.md', '.mdx']);
 const requiredFields = ['title', 'date'];
 const warnings: string[] = [];

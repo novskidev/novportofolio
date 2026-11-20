@@ -14,6 +14,7 @@
     "post:new": "bun scripts/new-content.ts blog",
     "project:new": "bun scripts/new-content.ts project",
     "vibe:new": "bun scripts/new-content.ts vibe",
+    "tool:new": "bun scripts/new-content.ts tool",
     "lint": "eslint .",
     "css:check": "grep -rh '@media' src | grep -o '[0-9]*px' | grep -vE '^(640|720|721|900|901|1180|1181)px$' && echo 'Unknown breakpoint above. Allowed: 640/720/900/1180' && exit 1 || exit 0",
     "format": "prettier --write .",

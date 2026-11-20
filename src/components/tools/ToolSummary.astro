@@ -1,0 +1,323 @@
+---
+import FormattedDate from '../FormattedDate.astro';
+import {
+  formatRating,
+  toolPricingLabels,
+  toolStatusLabels,
+  type ToolEntry,
+} from '../../utils/tools';
+
+interface Props {
+  tool: ToolEntry;
+}
+
+const { data } = Astro.props.tool;
+const reviewedDate = data.updatedDate ?? data.date;
+---
+
+<aside class="tool-summary" aria-label={`${data.title} at a glance`}>
+  <div class="tool-summary-top">
+    <div class="tool-summary-score" aria-label={`Rating ${formatRating(data.rating)} out of 5`}>
+      <strong>{formatRating(data.rating)}</strong>
+      <span>/ 5</span>
+    </div>
+    <p class="tool-summary-verdict">{data.verdict}</p>
+  </div>
+
+  <dl class="tool-summary-facts">
+    <div>
+      <dt>Status</dt>
+      <dd>
+        <span class:list={['tool-status', `tool-status-${data.status}`]}
+          >{toolStatusLabels[data.status]}</span
+        >
+      </dd>
+    </div>
+    <div>
+      <dt>Category</dt>
+      <dd>{data.category}</dd>
+    </div>
+    <div>
+      <dt>Pricing</dt>
+      <dd>{toolPricingLabels[data.pricing]}</dd>
+    </div>
+    <div>
+      <dt>Reviewed</dt>
+      <dd><FormattedDate date={reviewedDate} /></dd>
+    </div>
+    {
+      data.bestFor && (
+        <div class="tool-summary-wide">
+          <dt>Best for</dt>
+          <dd>{data.bestFor}</dd>
+        </div>
+      )
+    }
+  </dl>
+
+  {
+    (data.pros.length > 0 || data.cons.length > 0) && (
+      <div class="tool-summary-proscons">
+        {data.pros.length > 0 && (
+          <div class="tool-summary-list tool-summary-pros">
+            <h2>What works</h2>
+            <ul>
+              {data.pros.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {data.cons.length > 0 && (
+          <div class="tool-summary-list tool-summary-cons">
+            <h2>What doesn't</h2>
+            <ul>
+              {data.cons.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  <div class="tool-summary-footer">
+    <a class="tool-summary-visit" href={data.website} target="_blank" rel="noreferrer">
+      Visit {data.title}
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M7 17L17 7M17 7H8M17 7v9"></path>
+      </svg>
+    </a>
+    {
+      data.alternatives.length > 0 && (
+        <p class="tool-summary-alternatives">
+          <span>Alternatives:</span> {data.alternatives.join(', ')}
+        </p>
+      )
+    }
+  </div>
+</aside>
+
+<style>
+  .tool-summary {
+    display: grid;
+    gap: 20px;
+    margin: 0 0 32px;
+    padding: 22px;
+    border: 1px solid var(--paper-line);
+    border-radius: 12px;
+    background: var(--paper-surface);
+    box-shadow: var(--paper-shadow);
+    font-family: var(--font-ui, inherit);
+  }
+
+  .tool-summary-top {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .tool-summary-score {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: baseline;
+    gap: 4px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--paper-control);
+    color: var(--paper-ink);
+  }
+
+  .tool-summary-score strong {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .tool-summary-score span {
+    color: var(--paper-ink-faint);
+    font-size: 0.85rem;
+  }
+
+  .tool-summary-verdict {
+    margin: 0;
+    color: var(--paper-ink);
+    font-size: 1.02rem;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+
+  .tool-summary-facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px 18px;
+    margin: 0;
+    padding: 16px 0;
+    border-top: 1px solid var(--paper-line);
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .tool-summary-facts .tool-summary-wide {
+    grid-column: 1 / -1;
+  }
+
+  .tool-summary-facts dt,
+  .tool-summary-alternatives span {
+    color: var(--paper-ink-faint);
+    font-family: var(--font-ui-label, inherit);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tool-summary-facts dd {
+    margin: 4px 0 0;
+    color: var(--paper-ink);
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  .tool-status {
+    display: inline-block;
+    padding: 1px 8px;
+    border: 1px solid var(--paper-line);
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  .tool-status-daily-driver {
+    border-color: var(--paper-accent);
+    color: var(--paper-accent);
+  }
+
+  .tool-status-retired {
+    color: var(--paper-ink-faint);
+  }
+
+  .tool-summary-proscons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .tool-summary-list h2 {
+    margin: 0 0 8px;
+    color: var(--paper-ink);
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .tool-summary-list ul {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tool-summary-list li {
+    position: relative;
+    padding-left: 22px;
+    color: var(--paper-ink-soft);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .tool-summary-list li::before {
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+  }
+
+  .tool-summary-pros li::before {
+    content: '+';
+    color: var(--paper-accent);
+  }
+
+  .tool-summary-cons li::before {
+    content: '\2212';
+    color: var(--paper-ink-faint);
+  }
+
+  .tool-summary-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tool-summary-visit {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid var(--paper-line-strong, var(--paper-line));
+    border-radius: 999px;
+    color: var(--paper-ink);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease;
+  }
+
+  .tool-summary-visit:focus-visible {
+    outline: 2px solid var(--paper-accent);
+    outline-offset: 2px;
+  }
+
+  @media (hover: hover) {
+    .tool-summary-visit:hover {
+      border-color: var(--paper-ink);
+      background: var(--paper-control);
+    }
+  }
+
+  .tool-summary-alternatives {
+    margin: 0;
+    color: var(--paper-ink-soft);
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 640px) {
+    .tool-summary {
+      gap: 16px;
+      padding: 18px 16px;
+    }
+
+    .tool-summary-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .tool-summary-facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tool-summary-proscons {
+      grid-template-columns: 1fr;
+    }
+
+    .tool-summary-visit {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>

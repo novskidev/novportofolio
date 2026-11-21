@@ -51,6 +51,7 @@ interface Props {
   series?: string[];
   contentFont?: 'article' | 'ui';
   showMeta?: boolean;
+  showShare?: boolean;
 }
 
 const props = Astro.props;
@@ -321,7 +322,15 @@ function serializeJsonLd(value: unknown) {
             )
           }
         </article>
-        <ShareActions title={title} description={metaDescription} class="article-share-actions" />
+        {
+          props.showShare !== false && (
+            <ShareActions
+              title={title}
+              description={metaDescription}
+              class="article-share-actions"
+            />
+          )
+        }
         {
           hasRelatedPosts && (
             <RelatedPosts

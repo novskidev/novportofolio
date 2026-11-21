@@ -1,0 +1,57 @@
+---
+title: 'Kiri'
+description: 'A tiny, fast Rust container runtime that replaces Docker Desktop and works with the docker CLI, Compose, and buildx.'
+date: '2026-11-22'
+draft: false
+showHeroImage: false
+category: 'Developer tools'
+status: 'tried'
+rating: 4.5
+pricing: 'open-source'
+website: 'https://github.com/libracoder/kiri#docker-commands'
+verdict: 'A lightweight Docker Desktop replacement: same docker commands, a fraction of the startup time and idle memory.'
+bestFor: 'Running Docker images locally on macOS, Windows (WSL 2), or Linux without the weight of Docker Desktop'
+pros:
+  - 'Speaks the Docker Engine API, so `docker`, Compose, and buildx keep working'
+  - 'Very fast container start, and the VM sleeps after 60 s idle (daemon around 15 MB)'
+  - 'Local domains like `http://web.kiri.local` with HTTPS'
+  - 'One-command Kubernetes (`kiri k8s start`) and Linux machines'
+  - '`kiri import` brings images and volumes over from OrbStack or Docker Desktop'
+  - 'Open source (Apache-2.0) and free for work use'
+cons:
+  - 'Young project, so expect rough edges'
+  - 'Bulk traffic through published ports is slower than Docker Engine'
+alternatives: ['Docker Desktop', 'OrbStack', 'Colima', 'Podman']
+tags: ['Docker', 'Containers', 'DevOps', 'Open Source']
+---
+
+## Docker commands
+
+Pick the context once and the `docker` CLI you already have targets Kiri:
+
+```bash
+docker context use kiri
+```
+
+| Area       | Commands that work                                                                                                                                                                                 |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Containers | `run` `create` `start` `stop` `kill` `restart` `rm` `exec` `logs` `attach` `wait` `rename` `pause` `unpause` `update` `stats` `top` `diff` `export` `commit` `cp` `ps` `inspect` `container prune` |
+| Images     | `pull` `push` `tag` `images` `rmi` `save` `load` `history` `search` `login` `image prune`                                                                                                          |
+| Builds     | `build` `buildx build`                                                                                                                                                                             |
+| Networks   | `network create` `ls` `rm` `inspect` `connect` `disconnect`                                                                                                                                        |
+| Volumes    | `volume create` `ls` `rm` `inspect` `prune`                                                                                                                                                        |
+| Compose    | `compose up` `down` `ps` `logs` `exec`                                                                                                                                                             |
+| System     | `system df` `events` `info` `version`                                                                                                                                                              |
+
+The same commands also work as `kiri` commands and always target Kiri:
+
+```bash
+kiri run -d --name web -p 8080:80 nginx     # then open http://web.kiri.local
+kiri ps
+kiri logs -f web
+kiri exec -it web sh
+kiri compose up -d
+kiri build -t myapp .
+```
+
+Install on macOS with `brew install --cask libracoder/kiri/kiri`. Full reference: [Kiri on GitHub](https://github.com/libracoder/kiri#docker-commands).

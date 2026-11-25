@@ -1,0 +1,162 @@
+---
+title: 'Give Your AI Agent New Skills: Open-Source Tools by Category'
+description: 'How to extend Grok Bot, Hermes, Claude Code, or Codex through skills, MCP, and CLI/API/SDK, plus a curated list of open-source tools for images, 3D, games, and automation.'
+date: '2026-11-25T04:10:00.000Z'
+draft: false
+showHeroImage: false
+tags: ['AI Agent', 'MCP', 'Skills', 'Open Source', 'Tooling']
+categories: ['AI Tools']
+series: []
+comments: true
+sidebar:
+  enable: true
+  toc: true
+  relatedPosts: true
+---
+
+# Give Your AI Agent New Skills: Open-Source Tools by Category
+
+Agents like Grok Bot, Hermes, Claude Code, or Codex can be given new abilities through three main routes:
+
+1. **Skill:** a `SKILL.md` file with instructions for a single task.
+2. **MCP:** a server that connects the agent directly to an app.
+3. **CLI / API / SDK:** software the agent calls through commands or scripts.
+
+One important note: open-source does not always mean free to use. Some tools need a GPU, some have restrictive licenses, and some still ask for an API key.
+
+Below is the software I collected. Together it lets an agent create 3D objects, animate characters, build games, and even ship a full app with its database.
+
+---
+
+## Before You Install
+
+- **Pick one category first.** Do not install everything at once. Choose only what fits your needs.
+- **Read the README.** Check whether it needs a GPU, an API key, or an account.
+- **Check the license.** Some models cannot be used commercially.
+- **Agents that control your computer?** Test them in an empty folder or project first.
+- **Community-curated repos are not necessarily audited.** Review each one yourself.
+
+---
+
+## Images & Visuals
+
+- **Comfy MCP:** the agent runs ComfyUI workflows to generate images, video, audio, and 3D. Needs a GPU.
+- **Krita AI Diffusion:** inpaint, outpaint, and generate images directly inside Krita.
+- **SAM 2:** isolate specific objects from images or video.
+- **rembg:** automatic background removal, great for batches of hundreds of images.
+- **Upscayl:** AI image upscaling with a desktop app.
+
+## Video & Motion
+
+- **Motion Canvas:** motion graphics and animated diagrams written in TypeScript.
+- **Manim:** animated charts and explainer visuals in Python.
+- **HyperFrames:** turn HTML, CSS, and JS into MP4 video. A skill for Claude Code already exists.
+- **stickman-video-director:** turns a script into a stickman video with voiceover and captions.
+- **lemo-opuscar:** 99 film styles built in code, for Claude Code.
+- **FFmpeg:** merge clips, add subtitles and audio, and do the final render.
+
+## Voice & Music
+
+- **ACE-Step:** generate songs from a prompt, runs locally.
+- **Kokoro:** natural, lightweight text-to-speech.
+- **WhisperX:** transcription with word-level timestamps and speaker diarization.
+- **Demucs:** split a song into vocals, drums, bass, and other instruments.
+
+## 3D
+
+- **Blender MCP:** the agent creates objects, sets up scenes and materials, and runs Python scripts in Blender.
+- **Hunyuan3D:** image to textured 3D asset. Needs a GPU.
+- **TRELLIS.2:** image to textured 3D model. Needs a GPU with at least 24GB of VRAM.
+- **TripoSR:** quickly generate a 3D object from a single image.
+- **OpenSCAD:** script-based 3D modeling, ideal for 3D printing.
+
+## Characters & Animation
+
+- **OpenBone:** 2D skeletal character animation, with an MCP so the agent can drive it.
+- **UniRig:** automatic rigging for 3D characters.
+- **Synfig Studio:** 2D vector animation, bone rigging, and tweening.
+- **OpenToonz:** frame-by-frame 2D animation in an anime style.
+
+## Games
+
+- **Glade MCP:** the agent edits scenes, scripts, and physics, and builds in Unity or Godot.
+- **Godot MCP:** the agent opens the Godot editor, runs the project, and reads errors.
+- **Unity MCP:** the agent manages scenes, assets, and scripts in the Unity Editor.
+- **Pixelorama:** pixel art and sprite sheets.
+
+## Building Software
+
+- **OpenHands:** a coding agent that edits files and runs commands.
+- **Aider:** AI pair programming in the terminal, editing many files at once.
+- **Supabase:** a ready-made backend with database, auth, and storage.
+- **PocketBase:** a single-file backend with database, user login, and an admin dashboard.
+- **Playwright:** automated website testing after deploy.
+
+## Databases & Memory
+
+- **DuckDB:** query CSV, JSON, Parquet, and Excel with SQL, no server needed.
+- **Graphiti:** a knowledge graph that remembers when a fact changed.
+- **LightRAG:** build a Q&A system from documents plus a knowledge graph.
+- **Cognee:** long-term memory for agents.
+- **Qdrant:** a vector database for semantic search.
+
+## Internet Research
+
+- **SearXNG:** your own search engine that aggregates results from many engines.
+- **Scrapling:** scrape dynamic websites with clean Markdown output.
+- **Crawl4AI:** turn websites into LLM-ready Markdown.
+- **TrendRadar:** monitor trending topics and RSS, with Telegram notifications.
+- **changedetection.io:** get notified whenever a web page changes.
+- **ArchiveBox:** archive websites so they do not vanish when deleted.
+
+## Social & Content
+
+- **OpenMagpie:** cross-platform social listening, self-hostable.
+- **PRAW:** read Reddit posts and comments through the API.
+- **YouTube Transcript API:** fetch YouTube transcripts without downloading the video.
+- **yt-dlp:** download video, audio, subtitles, and metadata.
+
+## Website Checks
+
+- **WebCheck:** inspect a website's DNS, SSL, hosting, and headers.
+- **SpiderFoot:** automatically gather OSINT data from many sources.
+- **Amass:** map the subdomains and infrastructure of a domain.
+
+> Use the last two only on domains you own or have explicit permission to test.
+
+## Documents & Presentations
+
+- **Docling:** read PDF, DOCX, and PPTX files, tables included.
+- **MinerU:** convert messy PDFs into Markdown or JSON.
+- **Marp:** Markdown to slides in PDF, PPTX, or HTML.
+- **Slidev:** build presentations with Markdown and Vue.
+- **Excalidraw MCP:** the agent draws diagrams, checks the result itself, then fixes the layout.
+- **Mermaid CLI:** flowcharts and diagrams from text.
+
+## Browser & Computer Control
+
+- **Playwright MCP:** the agent controls a browser through Playwright.
+- **Browser Use:** the agent drives a browser with plain-language commands.
+- **Stagehand:** extract data and click around websites using natural instructions.
+- **Windows-MCP:** the agent opens apps, clicks, and types on Windows.
+- **CUA:** infrastructure for agents that operate a desktop through the screen.
+
+## Automation
+
+- **Activepieces:** connect apps, webhooks, and MCP into workflows.
+- **Windmill:** turn Python or TypeScript scripts into APIs, schedules, or workflows.
+- **Node-RED:** visual workflows connecting APIs and devices.
+- **Huginn:** build agents that watch for something and act on their own.
+
+---
+
+## Closing
+
+The safest way to start: pick one category, install one or two tools, then try a small project. For example:
+
+- A 3D mascot with **Hunyuan3D + Blender MCP**.
+- A mini game with **Glade MCP + ACE-Step**.
+
+If you want to dig further, check `awesome-ai-creator-stack`, `awesome-ai-game-dev-tools`, and `awesome-mcp-servers`. They are community collections, so vet each entry yourself.
+
+Which one are you most curious to try? Let me know in the comments.
